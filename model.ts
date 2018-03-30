@@ -1,10 +1,17 @@
 export class Model {
-  public id: number;
-  public name: string;
-
-  get cast(): any {
-    return { id :  'integer' };
+  protected get cast(): any {
+    return {
+      // attribute : method (integer | float | string ... )
+    };
   }
+
+  // private _relations: Array<ModelRelation>;
+
+  // addRelation(attribute: string, type: string, model: any)
+
+  // findRelation(attribute: string)
+
+  // setRelation(relation: ModelRelation)
 
   static toInteger(value: any): number {
     value = String(value).replace(/\s+/, '');
@@ -19,24 +26,26 @@ export class Model {
     return value;
   }
 
-  static toString(value: any): number {
-    return value;
+  static toString(value: any): string {
+    return String(value);
   }
 
   constructor(attributes?: any) {
     this.setAttributes(attributes);
   }
 
-  // TODO: update model method
+  update(attributes: any) {
+    this.iter(attributes, (prop, value) => {
+      if (this.hasOwnProperty(prop)) {
+        this[prop] = value;
+      }
+    });
+  }
 
   setAttributes(attributes: any) {
-    if (attributes) {
-      for (const prop in attributes) {
-        if (attributes.hasOwnProperty(prop)) {
-          this.setAttribute(prop, attributes[prop]);
-        }
-      }
-    }
+    this.iter(attributes, (prop, value) => {
+      this.setAttribute(prop, value);
+    });
   }
 
   setAttribute(property: string, value: any) {
@@ -69,7 +78,7 @@ export class Model {
   doCast(property: string, value: any) {
     const castTo = this.findCastAttribute(property);
     if (castTo) {
-      const castMethod = CastMethods[castTo];
+      const castMethod = CastMethods[castTo.toUpperCase()];
       if (Model[castMethod]) {
         value = Model[castMethod].call(this, value);
       }
@@ -81,10 +90,21 @@ export class Model {
   toJson(): any {
     return JSON.parse(JSON.stringify(this));
   }
+
+  protected iter(obj: any, callback: Function) {
+    if (obj && typeof callback === 'function') {
+      for (const prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+          callback.call(this, prop, obj[prop]);
+        }
+      }
+    }
+  }
 }
 
-export enum CastMethods {
-  integer = 'toInteger',
-  string  = 'toString',
-  float   = 'toFloat',
+// enum ??
+enum CastMethods {
+  INTEGER = 'toInteger',
+  STRING  = 'toString',
+  FLOAT   = 'toFloat'
 }
