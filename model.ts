@@ -1,26 +1,7 @@
+import { ModelRelation } from './model-relation';
+
 export class Model {
-  protected get cast(): any {
-    return {
-      // attribute : method (integer | float | string ... )
-    };
-  }
-
-  // private _relations: Array<ModelRelation>;
-
-  // addRelation(attribute: string, type: string, model: any)
-
-  // findRelation(attribute: string)
-
-  // setRelation(relation: ModelRelation)
-
-  static toInteger(value: any): number {
-    value = String(value).replace(/\s+/, '');
-    if (Number.isNaN(parseInt(value, 10))) {
-      return 0;
-    } else {
-      return parseInt(value, 10);
-    }
-  }
+  private _relations: Array<ModelRelation> = [];
 
   static toFloat(value: any): number {
     return value;
@@ -31,7 +12,30 @@ export class Model {
   }
 
   constructor(attributes?: any) {
+    this.relations();
     this.setAttributes(attributes);
+  }
+
+  protected get cast(): any {
+    return {
+      // attribute : method (integer | float | string ... )
+    };
+  }
+
+  protected get attributes(): Array<string> {
+    return [];
+  }
+
+  static toInteger(value: any): number {
+    value = String(value).replace(/\s+/, '');
+    if (Number.isNaN(parseInt(value, 10))) {
+      return 0;
+    } else {
+      return parseInt(value, 10);
+    }
+  }
+
+  protected relations() {
   }
 
   update(attributes: any) {
@@ -48,35 +52,44 @@ export class Model {
     });
   }
 
-  setAttribute(property: string, value: any) {
-    const privateProp = `_${property}`;
-    value = this.doCast(property, value);
+  setAttribute(attribute: string, value: any) {
+    if (this.attributes.includes(attribute)) {
+      const privateProp = `_${attribute}`;
 
-    // Sets private property
-    Object.defineProperty(this, privateProp, {
-      value        : value,
-      enumerable   : false,
-      configurable : true,
-      writable     : true
-    });
+      const relation = this.getRelation(attribute);
+      if (relation) {
+        // TODO: value = relation.set(value);
 
-    // Sets public property accessor and mutator
-    Object.defineProperty(this, property, {
-      get: () => this[privateProp],
-      set: (input: any) => this[privateProp] = this.doCast(property, input),
-      enumerable   : true,
-      configurable : true
-    });
-  }
+      } else {
+        value = this.doCast(attribute, value);
+      }
 
-  findCastAttribute(property: string): string {
-    if (this.cast && this.cast.hasOwnProperty(property)) {
-      return this.cast[property];
+      // Sets private attribute
+      Object.defineProperty(this, privateProp, {
+        value        : value,
+        enumerable   : false,
+        configurable : true,
+        writable     : true
+      });
+
+      // Sets public attribute accessor and mutator
+      Object.defineProperty(this, attribute, {
+        get: () => this[privateProp],
+        set: (input: any) => this[privateProp] = this.doCast(attribute, input),
+        enumerable   : true,
+        configurable : true
+      });
     }
   }
 
-  doCast(property: string, value: any) {
-    const castTo = this.findCastAttribute(property);
+  findCastAttribute(attribute: string): string {
+    if (this.cast && this.cast.hasOwnProperty(attribute)) {
+      return this.cast[attribute];
+    }
+  }
+
+  doCast(attribute: string, value: any) {
+    const castTo = this.findCastAttribute(attribute);
     if (castTo) {
       const castMethod = CastMethods[castTo.toUpperCase()];
       if (Model[castMethod]) {
@@ -99,6 +112,16 @@ export class Model {
         }
       }
     }
+  }
+
+  addRelation(attribute: string, type: string, model: any) {
+    this._relations.push(new ModelRelation(attribute, type, model));
+  }
+
+  getRelation(attribute: string) {
+    return this._relations.find(
+      (relation: ModelRelation) => relation.attribute === attribute
+    );
   }
 }
 
