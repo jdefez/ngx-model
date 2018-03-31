@@ -1,15 +1,13 @@
-import { Model } from './model';
+import { Model } from './ngx-model/model';
 import { Tag } from './tag';
 
 export class Picture extends Model {
-
   constructor(attributes?) {
     super(attributes);
-
   }
 
   protected relations() {
-    this.addRelation('tags', 'array', Tag);
+    this.addArrayOfModelsRelation('tags', Tag);
   }
 
   protected get attributes(): Array<string> {

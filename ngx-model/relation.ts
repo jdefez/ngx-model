@@ -1,16 +1,16 @@
-export class ModelRelation {
+export abstract class Relation {
   private _attribute: string;
   private _type: string;
   private _model: any;
 
-  constructor(attribute: string, type: string, model: any) {
+  constructor(type: string, attribute: string, model: any) {
     this._attribute = attribute;
-    this._type = type;
     this._model = model;
+    this._type = type;
   }
 
-  set(value: any) {
-  }
+  // TODO: model interface
+  abstract set(value: any): any;
 
   get attribute(): string {
     return this._attribute;

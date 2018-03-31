@@ -1,7 +1,9 @@
-import { ModelRelation } from './model-relation';
+import { ArrayOfModelsRelation } from './array-of-models-relation';
+import { SingleModelRelation } from './single-model-relation';
+import { Relation } from './relation';
 
 export class Model {
-  private _relations: Array<ModelRelation> = [];
+  private _relations: Array<Relation> = [];
 
   static toFloat(value: any): number {
     return value;
@@ -35,7 +37,12 @@ export class Model {
     }
   }
 
+  getRelations() {
+    return this._relations;
+  }
+
   protected relations() {
+    // Triggered at instanciation
   }
 
   update(attributes: any) {
@@ -58,7 +65,7 @@ export class Model {
 
       const relation = this.getRelation(attribute);
       if (relation) {
-        // TODO: value = relation.set(value);
+        value = relation.set(value);
 
       } else {
         value = this.doCast(attribute, value);
@@ -114,18 +121,24 @@ export class Model {
     }
   }
 
-  addRelation(attribute: string, type: string, model: any) {
-    this._relations.push(new ModelRelation(attribute, type, model));
+  // TODO: CustomRelation to face difficult relations implementations
+
+  addSingleModelsRelation(attribute: string, model: any) {
+    this._relations.push(new SingleModelRelation(attribute, model));
   }
 
-  getRelation(attribute: string) {
+  addArrayOfModelsRelation(attribute: string, model: any) {
+    this._relations.push(new ArrayOfModelsRelation(attribute, model));
+  }
+
+  getRelation(attribute: string): Relation {
     return this._relations.find(
-      (relation: ModelRelation) => relation.attribute === attribute
+      (relation: Relation) => relation.attribute === attribute
     );
   }
 }
 
-// enum ??
+// TODO: enum ??
 enum CastMethods {
   INTEGER = 'toInteger',
   STRING  = 'toString',
