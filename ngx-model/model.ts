@@ -2,11 +2,32 @@ import { ArrayOfModelsRelation } from './array-of-models-relation';
 import { SingleModelRelation } from './single-model-relation';
 import { Relation } from './relation';
 
+// TODO: enum ??
+enum CastMethods {
+  INTEGER = 'toInteger',
+  STRING  = 'toString',
+  FLOAT   = 'toFloat'
+}
+
 export class Model {
-  private _relations: Array<Relation> = [];
+  private _relations: Array<Relation>;
+
+  static toInteger(value: any): number {
+    value = String(value).replace(/\s+/, '');
+    if (Number.isNaN(parseInt(value, 10))) {
+      return 0;
+    } else {
+      return parseInt(value, 10);
+    }
+  }
 
   static toFloat(value: any): number {
-    return value;
+    value = String(value).replace(/,/, '.');
+    if (Number.isNaN(Number.parseFloat(value))) {
+      return 0;
+    } else {
+      return Number.parseFloat(value);
+    }
   }
 
   static toString(value: any): string {
@@ -14,6 +35,7 @@ export class Model {
   }
 
   constructor(attributes?: any) {
+    this.setPrivateProperty('_relations', []);
     this.relations();
     this.setAttributes(attributes);
   }
@@ -26,15 +48,6 @@ export class Model {
 
   protected get attributes(): Array<string> {
     return [];
-  }
-
-  static toInteger(value: any): number {
-    value = String(value).replace(/\s+/, '');
-    if (Number.isNaN(parseInt(value, 10))) {
-      return 0;
-    } else {
-      return parseInt(value, 10);
-    }
   }
 
   getRelations() {
@@ -61,7 +74,7 @@ export class Model {
 
   setAttribute(attribute: string, value: any) {
     if (this.attributes.includes(attribute)) {
-      const privateProp = `_${attribute}`;
+      const privateAttribute = `_${attribute}`;
 
       const relation = this.getRelation(attribute);
       if (relation) {
@@ -72,20 +85,10 @@ export class Model {
       }
 
       // Sets private attribute
-      Object.defineProperty(this, privateProp, {
-        value        : value,
-        enumerable   : false,
-        configurable : true,
-        writable     : true
-      });
+      this.setPrivateProperty(privateAttribute, value);
 
       // Sets public attribute accessor and mutator
-      Object.defineProperty(this, attribute, {
-        get: () => this[privateProp],
-        set: (input: any) => this[privateProp] = this.doCast(attribute, input),
-        enumerable   : true,
-        configurable : true
-      });
+      this.setAccessorAndMutator(attribute, privateAttribute);
     }
   }
 
@@ -121,7 +124,23 @@ export class Model {
     }
   }
 
-  // TODO: CustomRelation to face difficult relations implementations
+  protected setPrivateProperty(attribute, value) {
+    Object.defineProperty(this, attribute, {
+      value        : value,
+      enumerable   : false,
+      configurable : true,
+      writable     : true
+    });
+  }
+
+  protected setAccessorAndMutator(attribute, privateAttribute) {
+    Object.defineProperty(this, attribute, {
+      get: () => this[privateAttribute],
+      set: (input: any) => this[privateAttribute] = this.doCast(attribute, input),
+      enumerable   : true,
+      configurable : true
+    });
+  }
 
   addSingleModelsRelation(attribute: string, model: any) {
     this._relations.push(new SingleModelRelation(attribute, model));
@@ -131,16 +150,11 @@ export class Model {
     this._relations.push(new ArrayOfModelsRelation(attribute, model));
   }
 
+  // TODO: CustomRelation to face difficult relations implementations
+
   getRelation(attribute: string): Relation {
     return this._relations.find(
       (relation: Relation) => relation.attribute === attribute
     );
   }
-}
-
-// TODO: enum ??
-enum CastMethods {
-  INTEGER = 'toInteger',
-  STRING  = 'toString',
-  FLOAT   = 'toFloat'
 }
