@@ -12,16 +12,14 @@ export abstract class Model {
     this.setPrivateProperty('_attributes', []);
     this.setPrivateProperty('_relations', []);
 
-    // Collects attributes and relations definitions at instanciation.
+    // Collects attributes and relations definition.
     this.attributesAndRelationsHook();
 
-    // Sets attributes private and public value, accessor and  mutator.
-
-    // TODO
-    // Iterate over attributes first.
+    // Sets properties private and public accessor and  mutator by using
+    // attributes definition.
     this.setProperties();
 
-    // Set initial values
+    // Set initial values if any.
     this.update(attributes);
   }
 
@@ -42,27 +40,18 @@ export abstract class Model {
   }
 
   setProperty(attribute: Attribute) {
-    // const relation = this.findRelation(name);
-    // if (relation) {
-    //   value = relation.set(value);
-
-    // } else {
-    //   value = this.doCast(name, value);
-    // }
-
-    // Sets private attribute.
+    // Sets private property.
     this.setPrivateProperty(attribute.private_name, attribute.default_value);
 
-    // Sets public attribute accessor and mutator.
+    // Sets property accessor and mutator.
     this.setAccessorAndMutator(attribute.name, attribute.private_name);
   }
 
   // Attribute methods
   findAttribute(name: string): Attribute {
-    const att = this._attributes.find(
+    return this._attributes.find(
       (attribute: Attribute) => attribute.name === name
     );
-    return att;
   }
 
   attributeExists(name: string): boolean {
@@ -115,10 +104,7 @@ export abstract class Model {
     Object.defineProperty(this, name, {
       get: () => this[private_name],
       set: (input: any) => {
-        const relation = this.findRelation(name);
-        if (relation) {
-          input = relation.set(input);
-        }
+        input = this.applyRelation(name, input);
 
         this[private_name] = this.doCast(name, input);
       },
@@ -145,5 +131,13 @@ export abstract class Model {
     return this._relations.find(
       (relation: Relation) => relation.attribute === attribute
     );
+  }
+
+  applyRelation(attribute: string, value: any) {
+    const relation = this.findRelation(attribute);
+    if (relation) {
+      value = relation.set(value);
+    }
+    return value;
   }
 }
