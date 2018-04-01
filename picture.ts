@@ -19,9 +19,9 @@ export class Picture extends Model {
     this.addAttribute('id', null, Validators.toInteger);
     this.addAttribute('name');
     this.addAttribute('src');
+    this.addAttribute('selected', false, Validators.toBoolean);
     this.addAttribute('tags', []);
     this.addAttribute('location');
-    this.addAttribute('selected', false);
 
     this.addArrayOfModelsRelation('tags', Tag);
     this.addSingleModelsRelation('location', Location);
