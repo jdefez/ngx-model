@@ -20,4 +20,11 @@ export class Validators {
   static toString(value: any): string {
     return String(value);
   }
+
+  static toBoolean(value: any): boolean {
+    if (String(value) === 'false') {
+      return false;
+    }
+    return Boolean(value);
+  }
 }
