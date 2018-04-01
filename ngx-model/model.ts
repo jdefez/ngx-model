@@ -1,43 +1,30 @@
 import { ArrayOfModelsRelation } from './array-of-models-relation';
 import { SingleModelRelation } from './single-model-relation';
+import { CustomRelation } from './custom-relation';
 import { Attribute } from './attribute';
 import { Relation } from './relation';
 
-// TODO: Convert to abstract class to force the implementation of relations and attributes methods.
-//  This two methods shall be merged.
-
-export class Model {
-  private _default_attributes: Array<Attribute>;
+export abstract class Model {
+  private _attributes: Array<Attribute>;
   private _relations: Array<Relation>;
 
   constructor(attributes?: any) {
-    this.setPrivateProperty('_default_attributes', []);
+    this.setPrivateProperty('_attributes', []);
     this.setPrivateProperty('_relations', []);
 
-    // Collects relations definitions.
-    this.relations();
-
-    // Collects default attributes.
-    this.attributes();
+    // Collects attributes and relations definitions at instanciation.
+    this.attributesAndRelationsHook();
 
     // Sets attributes private and public value, accessor and  mutator.
-    this.setAttributes(attributes);
+
+    // TODO
+    // Iterate over attributes first.
+
+    // Set initial values
+    this.setProperties(attributes);
   }
 
-  // TODO: Merge attributes and relations methods
-
-  protected attributes() {
-    // Triggered at instanciation by using this:
-    //
-    //  this.addAttribute(name: string, default_attribute: any = null, validator: Function = null);
-  }
-
-  protected relations() {
-    // Triggered at instanciation by using this:
-    //
-    //  this.addArrayOfModelsRelation('attribute_name', ModelName);
-    //  this.addSingleModelsRelation('other_attribute_name', OtherModelName);
-  }
+  protected abstract attributesAndRelationsHook(): void;
 
   update(attributes: any) {
     this.iter(attributes, (prop, value) => {
@@ -47,42 +34,35 @@ export class Model {
     });
   }
 
-  setAttributes(attributes: any) {
+  setProperties(attributes: any) {
     this.iter(attributes, (prop, value) => {
-      this.setAttribute(prop, value);
+      this.setProperty(prop, value);
     });
   }
 
-  setAttribute(attribute: string, value: any) {
-    if (this.attributeExists(attribute)) {
-      const default_attribute = this.findAttribute(attribute);
-      const private_name = `_${attribute}`;
+  setProperty(name: string, value: any) {
+    if (this.attributeExists(name)) {
+      const attribute = this.findAttribute(name);
 
-      const relation = this.getRelation(attribute);
+      const relation = this.findRelation(name);
       if (relation) {
         value = relation.set(value);
 
       } else {
-        // TODO: Not sure of this !!
-        //
-        // if (!value) {
-        //   value = default_attribute.default_value;
-        // }
-
-        value = this.doCast(attribute, value);
+        value = this.doCast(name, value);
       }
 
-      // Sets private attribute
-      this.setPrivateProperty(private_name, value);
+      // Sets private attribute.
+      this.setPrivateProperty(attribute.private_name, value);
 
-      // Sets public attribute accessor and mutator
-      this.setAccessorAndMutator(attribute, private_name);
+      // Sets public attribute accessor and mutator.
+      this.setAccessorAndMutator(name, attribute.private_name);
     }
   }
 
-  // Default attribute methods
+  // Attribute methods
   findAttribute(name: string): Attribute {
-    const att = this._default_attributes.find(
+    const att = this._attributes.find(
       (attribute: Attribute) => attribute.name === name
     );
     return att;
@@ -92,19 +72,19 @@ export class Model {
     return this.findAttribute(name) instanceof Attribute;
   }
 
-  addAttribute(name: string, default_attribute: any = null, validator: Function = null) {
+  addAttribute(name: string, attribute: any = null, validator: Function = null) {
     if (this.attributeExists(name) === false) {
-      this._default_attributes.push(
-        new Attribute(name, default_attribute, validator)
+      this._attributes.push(
+        new Attribute(name, attribute, validator)
       );
     }
   }
 
-  doCast(attribute: string, value: any) {
-    if (this.attributeExists(attribute)) {
-      const default_attribute = this.findAttribute(attribute);
-      if (default_attribute.has_validator) {
-        value = default_attribute.validator.call(null, value);
+  doCast(name: string, value: any) {
+    if (this.attributeExists(name)) {
+      const attribute = this.findAttribute(name);
+      if (attribute.has_validator) {
+        value = attribute.validator.call(null, value);
       }
     }
 
@@ -125,8 +105,8 @@ export class Model {
     }
   }
 
-  protected setPrivateProperty(attribute, value) {
-    Object.defineProperty(this, attribute, {
+  protected setPrivateProperty(name: string, value: any) {
+    Object.defineProperty(this, name, {
       value        : value,
       enumerable   : false,
       configurable : true,
@@ -134,15 +114,16 @@ export class Model {
     });
   }
 
-  protected setAccessorAndMutator(attribute, private_name) {
-    Object.defineProperty(this, attribute, {
+  protected setAccessorAndMutator(name: string, private_name: string) {
+    Object.defineProperty(this, name, {
       get: () => this[private_name],
-      set: (input: any) => this[private_name] = this.doCast(attribute, input),
+      set: (input: any) => this[private_name] = this.doCast(name, input),
       enumerable: true,
       configurable: true
     });
   }
 
+  // Relations methods
   addSingleModelsRelation(attribute: string, model: any) {
     this._relations.push(new SingleModelRelation(attribute, model));
   }
@@ -151,9 +132,12 @@ export class Model {
     this._relations.push(new ArrayOfModelsRelation(attribute, model));
   }
 
-  // TODO: CustomRelation to face difficult relations implementations
+  addCustomRelation(attribute: string, callback: Function) {
+    // TODO: Test this feature.
+    this._relations.push(new CustomRelation(attribute, callback));
+  }
 
-  getRelation(attribute: string): Relation {
+  findRelation(attribute: string): Relation {
     return this._relations.find(
       (relation: Relation) => relation.attribute === attribute
     );

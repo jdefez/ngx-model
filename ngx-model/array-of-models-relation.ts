@@ -2,7 +2,7 @@ import { Relation } from './relation';
 
 export class ArrayOfModelsRelation extends Relation {
   constructor(attribute: string, model: any) {
-    super('array-of-models', attribute, model);
+    super('custom-relation', attribute, model);
   }
 
   set(value: any): any {

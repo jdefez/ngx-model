@@ -13,6 +13,10 @@ export class Attribute {
     return this._name;
   }
 
+  get private_name(): string {
+    return `_${this.name}`;
+  }
+
   get default_value(): any {
     return this._default_value;
   }
