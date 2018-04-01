@@ -1,61 +1,42 @@
 import { ArrayOfModelsRelation } from './array-of-models-relation';
 import { SingleModelRelation } from './single-model-relation';
+import { Attribute } from './attribute';
 import { Relation } from './relation';
 
-// TODO: enum ??
-enum CastMethods {
-  INTEGER = 'toInteger',
-  STRING  = 'toString',
-  FLOAT   = 'toFloat'
-}
+// TODO: Convert to abstract class to force the implementation of relations and attributes methods.
+//  This two methods shall be merged.
 
 export class Model {
+  private _default_attributes: Array<Attribute>;
   private _relations: Array<Relation>;
 
-  static toInteger(value: any): number {
-    value = String(value).replace(/\s+/, '');
-    if (Number.isNaN(parseInt(value, 10))) {
-      return 0;
-    } else {
-      return parseInt(value, 10);
-    }
-  }
-
-  static toFloat(value: any): number {
-    value = String(value).replace(/,/, '.');
-    if (Number.isNaN(Number.parseFloat(value))) {
-      return 0;
-    } else {
-      return Number.parseFloat(value);
-    }
-  }
-
-  static toString(value: any): string {
-    return String(value);
-  }
-
   constructor(attributes?: any) {
+    this.setPrivateProperty('_default_attributes', []);
     this.setPrivateProperty('_relations', []);
+
+    // Collects relations definitions.
     this.relations();
+
+    // Collects default attributes.
+    this.attributes();
+
+    // Sets attributes private and public value, accessor and  mutator.
     this.setAttributes(attributes);
   }
 
-  protected get cast(): any {
-    return {
-      // attribute : method (integer | float | string ... )
-    };
-  }
+  // TODO: Merge attributes and relations methods
 
-  protected get attributes(): Array<string> {
-    return [];
-  }
-
-  getRelations() {
-    return this._relations;
+  protected attributes() {
+    // Triggered at instanciation by using this:
+    //
+    //  this.addAttribute(name: string, default_attribute: any = null, validator: Function = null);
   }
 
   protected relations() {
-    // Triggered at instanciation
+    // Triggered at instanciation by using this:
+    //
+    //  this.addArrayOfModelsRelation('attribute_name', ModelName);
+    //  this.addSingleModelsRelation('other_attribute_name', OtherModelName);
   }
 
   update(attributes: any) {
@@ -73,37 +54,57 @@ export class Model {
   }
 
   setAttribute(attribute: string, value: any) {
-    if (this.attributes.includes(attribute)) {
-      const privateAttribute = `_${attribute}`;
+    if (this.attributeExists(attribute)) {
+      const default_attribute = this.findAttribute(attribute);
+      const private_name = `_${attribute}`;
 
       const relation = this.getRelation(attribute);
       if (relation) {
         value = relation.set(value);
 
       } else {
+        // TODO: Not sure of this !!
+        //
+        // if (!value) {
+        //   value = default_attribute.default_value;
+        // }
+
         value = this.doCast(attribute, value);
       }
 
       // Sets private attribute
-      this.setPrivateProperty(privateAttribute, value);
+      this.setPrivateProperty(private_name, value);
 
       // Sets public attribute accessor and mutator
-      this.setAccessorAndMutator(attribute, privateAttribute);
+      this.setAccessorAndMutator(attribute, private_name);
     }
   }
 
-  findCastAttribute(attribute: string): string {
-    if (this.cast && this.cast.hasOwnProperty(attribute)) {
-      return this.cast[attribute];
+  // Default attribute methods
+  findAttribute(name: string): Attribute {
+    const att = this._default_attributes.find(
+      (attribute: Attribute) => attribute.name === name
+    );
+    return att;
+  }
+
+  attributeExists(name: string): boolean {
+    return this.findAttribute(name) instanceof Attribute;
+  }
+
+  addAttribute(name: string, default_attribute: any = null, validator: Function = null) {
+    if (this.attributeExists(name) === false) {
+      this._default_attributes.push(
+        new Attribute(name, default_attribute, validator)
+      );
     }
   }
 
   doCast(attribute: string, value: any) {
-    const castTo = this.findCastAttribute(attribute);
-    if (castTo) {
-      const castMethod = CastMethods[castTo.toUpperCase()];
-      if (Model[castMethod]) {
-        value = Model[castMethod].call(this, value);
+    if (this.attributeExists(attribute)) {
+      const default_attribute = this.findAttribute(attribute);
+      if (default_attribute.has_validator) {
+        value = default_attribute.validator.call(null, value);
       }
     }
 
@@ -133,12 +134,12 @@ export class Model {
     });
   }
 
-  protected setAccessorAndMutator(attribute, privateAttribute) {
+  protected setAccessorAndMutator(attribute, private_name) {
     Object.defineProperty(this, attribute, {
-      get: () => this[privateAttribute],
-      set: (input: any) => this[privateAttribute] = this.doCast(attribute, input),
-      enumerable   : true,
-      configurable : true
+      get: () => this[private_name],
+      set: (input: any) => this[private_name] = this.doCast(attribute, input),
+      enumerable: true,
+      configurable: true
     });
   }
 

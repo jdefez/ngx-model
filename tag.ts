@@ -5,7 +5,8 @@ export class Tag extends Model {
     super(attributes);
   }
 
-  protected get attributes(): Array<string> {
-    return ['id', 'name'];
+  protected attributes() {
+    this.addAttribute('id');
+    this.addAttribute('name');
   }
 }
