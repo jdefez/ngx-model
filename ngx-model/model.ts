@@ -19,9 +19,10 @@ export abstract class Model {
 
     // TODO
     // Iterate over attributes first.
+    this.setProperties();
 
     // Set initial values
-    this.setProperties(attributes);
+    this.update(attributes);
   }
 
   protected abstract attributesAndRelationsHook(): void;
@@ -34,30 +35,26 @@ export abstract class Model {
     });
   }
 
-  setProperties(attributes: any) {
-    this.iter(attributes, (prop, value) => {
-      this.setProperty(prop, value);
-    });
+  setProperties() {
+    this._attributes.forEach(
+      (attribute: Attribute) => this.setProperty(attribute)
+    );
   }
 
-  setProperty(name: string, value: any) {
-    if (this.attributeExists(name)) {
-      const attribute = this.findAttribute(name);
+  setProperty(attribute: Attribute) {
+    // const relation = this.findRelation(name);
+    // if (relation) {
+    //   value = relation.set(value);
 
-      const relation = this.findRelation(name);
-      if (relation) {
-        value = relation.set(value);
+    // } else {
+    //   value = this.doCast(name, value);
+    // }
 
-      } else {
-        value = this.doCast(name, value);
-      }
+    // Sets private attribute.
+    this.setPrivateProperty(attribute.private_name, attribute.default_value);
 
-      // Sets private attribute.
-      this.setPrivateProperty(attribute.private_name, value);
-
-      // Sets public attribute accessor and mutator.
-      this.setAccessorAndMutator(name, attribute.private_name);
-    }
+    // Sets public attribute accessor and mutator.
+    this.setAccessorAndMutator(attribute.name, attribute.private_name);
   }
 
   // Attribute methods
@@ -117,7 +114,14 @@ export abstract class Model {
   protected setAccessorAndMutator(name: string, private_name: string) {
     Object.defineProperty(this, name, {
       get: () => this[private_name],
-      set: (input: any) => this[private_name] = this.doCast(name, input),
+      set: (input: any) => {
+        const relation = this.findRelation(name);
+        if (relation) {
+          input = relation.set(input);
+        }
+
+        this[private_name] = this.doCast(name, input);
+      },
       enumerable: true,
       configurable: true
     });
