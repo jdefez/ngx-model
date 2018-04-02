@@ -1,14 +1,11 @@
 "use strict";
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
 Object.defineProperty(exports, "__esModule", { value: true });
-var array_of_models_1 = require("./lib/relations/array-of-models");
-exports.ArrayOfModelsRelation = array_of_models_1.ArrayOfModelsRelation;
-var single_model_1 = require("./lib/relations/single-model");
-exports.SingleModelRelation = single_model_1.SingleModelRelation;
-var custom_1 = require("./lib/relations/custom");
-exports.CustomRelation = custom_1.CustomRelation;
-var formatters_1 = require("./lib/formatters");
-exports.Formatters = formatters_1.Formatters;
-var attribute_1 = require("./lib/attribute");
-exports.Attribute = attribute_1.Attribute;
-var model_1 = require("./lib/model");
-exports.Model = model_1.Model;
+__export(require("./lib/relations/array-of-models"));
+__export(require("./lib/relations/single-model"));
+__export(require("./lib/relations/custom"));
+__export(require("./lib/formatters"));
+__export(require("./lib/attribute"));
+__export(require("./lib/model"));

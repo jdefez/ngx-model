@@ -8,7 +8,7 @@ export declare abstract class Model {
     update(attributes: any): void;
     setProperties(): void;
     setProperty(attribute: Attribute): void;
-    findAttribute(name: string): Attribute | undefined;
+    findAttribute(name: string): Attribute;
     attributeExists(name: string): boolean;
     addAttribute(name: string, attribute?: any, formatter?: Function): void;
     doCast(name: string, value: any): any;

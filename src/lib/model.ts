@@ -48,7 +48,7 @@ export abstract class Model {
   }
 
   // Attribute methods
-  findAttribute(name: string): Attribute | undefined {
+  findAttribute(name: string): Attribute {
     const found = this._attributes.find(
       (attribute: Attribute) => attribute.name === name
     );
