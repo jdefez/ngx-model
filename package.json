@@ -6,6 +6,8 @@
   "types" : "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "watch": "watch --wait=5 'npm run start' src/",
+    "clean": "rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,7 +17,8 @@
   "author": "DEFEZ jean-françois",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jdefez/ngx-model/issues"
+    "url": "https://github.com/jdefez/ngx-model/issues",
+    "email": "jdefez@gmail.com"
   },
   "homepage": "https://github.com/jdefez/ngx-model#readme",
   "devDependencies": {
