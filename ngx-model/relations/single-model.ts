@@ -1,6 +1,6 @@
-import { Relation } from './relation';
+import { Relation } from '../relation';
 
-export class RelationSingleModel extends Relation {
+export class SingleModelRelation extends Relation {
   constructor(attribute: string, model: any) {
     super('single-model', attribute, model);
   }

@@ -1,8 +1,8 @@
-import { RelationArrayOfModels } from './relations/relation-array-of-models';
-import { RelationSingleModel } from './relations/relation-single-model';
-import { RelationCustom } from './relations/relation-custom';
+import { ArrayOfModelsRelation } from './relations/array-of-models';
+import { SingleModelRelation } from './relations/single-model';
+import { CustomRelation } from './relations/custom';
 import { Attribute } from './attribute';
-import { Relation } from './relations//relation';
+import { Relation } from './relation';
 
 export abstract class Model {
   private _attributes: Array<Attribute>;
@@ -114,16 +114,16 @@ export abstract class Model {
 
   // Relations methods
   addSingleModelsRelation(attribute: string, model: any) {
-    this._relations.push(new RelationSingleModel(attribute, model));
+    this._relations.push(new SingleModelRelation(attribute, model));
   }
 
   addArrayOfModelsRelation(attribute: string, model: any) {
-    this._relations.push(new RelationArrayOfModels(attribute, model));
+    this._relations.push(new ArrayOfModelsRelation(attribute, model));
   }
 
   addCustomRelation(attribute: string, callback: Function) {
     // TODO: Test this feature.
-    this._relations.push(new RelationCustom(attribute, callback));
+    this._relations.push(new CustomRelation(attribute, callback));
   }
 
   findRelation(attribute: string): Relation {

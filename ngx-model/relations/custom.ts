@@ -1,5 +1,5 @@
-import { Relation } from './relation';
-export class RelationCustom  extends Relation {
+import { Relation } from '../relation';
+export class CustomRelation  extends Relation {
   constructor(attribute: string, callback?: Function) {
     super('array-of-models', attribute, null, callback);
   }
