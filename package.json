@@ -1,9 +1,9 @@
 {
   "name": "ngx-models",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "creating models and models relation from json",
   "main": "dist/index.js",
-  "types" : "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "watch": "watch --wait=5 'npm run start' src/",
