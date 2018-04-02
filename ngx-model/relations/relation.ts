@@ -1,4 +1,4 @@
-import { Model } from './model';
+import { Model } from '../model';
 
 export abstract class Relation {
   private _attribute: string;

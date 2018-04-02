@@ -1,4 +1,4 @@
-import { Validators } from './ngx-model/validators';
+import { Formatters } from './ngx-model/formatters';
 import { Location } from './location';
 import { Model } from './ngx-model/model';
 import { Tag } from './tag';
@@ -16,17 +16,14 @@ export class Picture extends Model {
   }
 
   protected attributesAndRelationsHook() {
-    this.addAttribute('id', null, Validators.toInteger);
+    this.addAttribute('id', null, Formatters.toInteger);
     this.addAttribute('name');
     this.addAttribute('src');
-    this.addAttribute('selected', false, Validators.toBoolean);
+    this.addAttribute('selected', false, Formatters.toBoolean);
     this.addAttribute('tags', []);
     this.addAttribute('location');
 
     this.addArrayOfModelsRelation('tags', Tag);
     this.addSingleModelsRelation('location', Location);
-  }
-
-  protected attributes() {
   }
 }

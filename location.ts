@@ -1,4 +1,4 @@
-import { Validators } from './ngx-model/validators';
+import { Formatters } from './ngx-model/formatters';
 import { Model } from './ngx-model/model';
 
 export class Location extends Model {
@@ -10,8 +10,8 @@ export class Location extends Model {
   }
 
   protected attributesAndRelationsHook() {
-    this.addAttribute('latitude', null, Validators.toFloat);
-    this.addAttribute('longitude', null, Validators.toFloat);
+    this.addAttribute('latitude', null, Formatters.toFloat);
+    this.addAttribute('longitude', null, Formatters.toFloat);
   }
 
   get latLng(): Array<number> {

@@ -1,6 +1,6 @@
 import { Relation } from './relation';
 
-export class ArrayOfModelsRelation extends Relation {
+export class RelationArrayOfModels extends Relation {
   constructor(attribute: string, model: any) {
     super('custom-relation', attribute, model);
   }
