@@ -1,7 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class Formatters {
-    static toInteger(value) {
+var Formatters = (function () {
+    function Formatters() {
+    }
+    Formatters.toInteger = function (value) {
         value = String(value).replace(/\s+/, '');
         if (Number.isNaN(parseInt(value, 10))) {
             return 0;
@@ -9,8 +9,8 @@ class Formatters {
         else {
             return parseInt(value, 10);
         }
-    }
-    static toFloat(value) {
+    };
+    Formatters.toFloat = function (value) {
         value = String(value).replace(/,/, '.');
         if (Number.isNaN(Number.parseFloat(value))) {
             return 0;
@@ -18,15 +18,17 @@ class Formatters {
         else {
             return Number.parseFloat(value);
         }
-    }
-    static toString(value) {
+    };
+    Formatters.toString = function (value) {
         return String(value);
-    }
-    static toBoolean(value) {
+    };
+    Formatters.toBoolean = function (value) {
         if (String(value) === 'false') {
             return false;
         }
         return Boolean(value);
-    }
-}
-exports.Formatters = Formatters;
+    };
+    return Formatters;
+}());
+export { Formatters };
+//# sourceMappingURL=formatters.js.map

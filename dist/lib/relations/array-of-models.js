@@ -1,17 +1,24 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const relation_1 = require("../relation");
-class ArrayOfModelsRelation extends relation_1.Relation {
-    constructor(attribute, model) {
-        super('custom-relation', attribute, model);
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+import { Relation } from '../relation';
+var ArrayOfModelsRelation = (function (_super) {
+    __extends(ArrayOfModelsRelation, _super);
+    function ArrayOfModelsRelation(attribute, model) {
+        return _super.call(this, 'custom-relation', attribute, model) || this;
     }
-    set(value) {
+    ArrayOfModelsRelation.prototype.set = function (value) {
+        var _this = this;
         // TODO: check value and value items type.
-        value = value.map((item) => {
-            const model = this.model;
+        value = value.map(function (item) {
+            var model = _this.model;
             return new model(item);
         });
         return value;
-    }
-}
-exports.ArrayOfModelsRelation = ArrayOfModelsRelation;
+    };
+    return ArrayOfModelsRelation;
+}(Relation));
+export { ArrayOfModelsRelation };
+//# sourceMappingURL=array-of-models.js.map

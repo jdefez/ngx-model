@@ -1,11 +1,7 @@
-"use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-__export(require("./lib/relations/array-of-models"));
-__export(require("./lib/relations/single-model"));
-__export(require("./lib/relations/custom"));
-__export(require("./lib/formatters"));
-__export(require("./lib/attribute"));
-__export(require("./lib/model"));
+export * from './lib/relations/array-of-models';
+export * from './lib/relations/single-model';
+export * from './lib/relations/custom';
+export * from './lib/formatters';
+export * from './lib/attribute';
+export * from './lib/model';
+//# sourceMappingURL=index.js.map
