@@ -1,8 +1,10 @@
 import { Relation } from '../relation';
 
 export class ArrayOfModelsRelation extends Relation {
+  protected _default: any = [];
+
   constructor(attribute: string, model: any) {
-    super('custom-relation', attribute, model);
+    super('array-of-models', attribute, model);
   }
 
   set(value: any): any {

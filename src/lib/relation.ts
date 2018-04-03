@@ -1,6 +1,7 @@
 import { Model } from './model';
 
 export abstract class Relation {
+  protected _default: any = null;
   private _attribute: string;
   private _callback: Function;
   private _type: string;
@@ -15,6 +16,10 @@ export abstract class Relation {
 
   // TODO: model interface
   abstract set(value: any): any;
+
+  get default() {
+    return this._default;
+  }
 
   get attribute(): string {
     return this._attribute;

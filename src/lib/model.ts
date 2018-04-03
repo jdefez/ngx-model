@@ -16,7 +16,7 @@ export abstract class Model {
     this.attributesAndRelationsHook();
 
     // Sets properties private and public accessor and  mutator by using
-    // attributes definition.
+    // attribute definitions.
     this.setProperties();
 
     // Set initial values if any.
@@ -34,9 +34,16 @@ export abstract class Model {
   }
 
   setProperties() {
-    this._attributes.forEach(
-      (attribute: Attribute) => this.setProperty(attribute)
-    );
+    // Find and set missing attribute definitions found in relation definition.
+    this._relations.forEach((relation: Relation) => {
+      if (this.attributeDoesNotExists(relation.attribute)) {
+        this.addAttribute(relation.attribute, relation.default);
+      }
+    });
+
+    this._attributes.forEach((attribute: Attribute) => {
+      this.setProperty(attribute)
+    });
   }
 
   setProperty(attribute: Attribute) {
@@ -49,29 +56,29 @@ export abstract class Model {
 
   // Attribute methods
   findAttribute(name: string): Attribute {
-    const found = this._attributes.find(
+    return this._attributes.find(
       (attribute: Attribute) => attribute.name === name
     );
-    if (found) {
-      return found;
-    }
   }
 
   attributeExists(name: string): boolean {
     return this.findAttribute(name) instanceof Attribute;
   }
 
+  attributeDoesNotExists(name: string): boolean {
+    return this.attributeExists(name) === false;
+  }
+
   addAttribute(name: string, attribute?: any, formatter?: Function) {
-    if (this.attributeExists(name) === false) {
-      this._attributes.push(
-        new Attribute(name, attribute, formatter)
-      );
+    if (this.attributeDoesNotExists(name)) {
+      this._attributes.push(new Attribute(name, attribute, formatter));
     }
   }
 
   doCast(name: string, value: any) {
     if (this.attributeExists(name)) {
       const attribute = this.findAttribute(name);
+
       if (attribute.has_formatter) {
         value = attribute.formatter.call(null, value);
       }
