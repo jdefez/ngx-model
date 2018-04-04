@@ -34,15 +34,25 @@ export abstract class Model {
   }
 
   setProperties() {
+    const missing_attribute_definitions = [];
+
     // Find and set missing attribute definitions found in relation definition.
     this._relations.forEach((relation: Relation) => {
       if (this.attributeDoesNotExists(relation.attribute)) {
+        missing_attribute_definitions.push(relation.attribute);
         this.addAttribute(relation.attribute, relation.default);
       }
     });
 
+    if (missing_attribute_definitions.length > 0) {
+      this.log(
+        `Found attribute reference in relations which were not defined as`
+        + ` attribue: ${missing_attribute_definitions.join(', ')}.`
+      );
+    }
+
     this._attributes.forEach((attribute: Attribute) => {
-      this.setProperty(attribute)
+      this.setProperty(attribute);
     });
   }
 
@@ -85,10 +95,6 @@ export abstract class Model {
     }
 
     return value;
-  }
-
-  toJson(): any {
-    return JSON.parse(JSON.stringify(this));
   }
 
   protected iter(obj: any, callback: Function) {
@@ -148,5 +154,32 @@ export abstract class Model {
       value = relation.set(value);
     }
     return value;
+  }
+
+  className() {
+    return this.constructor.name;
+  }
+
+  // TODO: implement
+  // clone() {
+  // }
+
+  toObject () {
+    return JSON.parse(this.toJson());
+  }
+
+  toJson(): any {
+    return JSON.stringify(this);
+  }
+
+  log(message: string) {
+    message = `${this.className()} model, ${message}`;
+    if (console) {
+      if (console.warn) {
+        console.warn(message);
+      } else {
+        console.log(message);
+      }
+    }
   }
 }
