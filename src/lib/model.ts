@@ -138,7 +138,7 @@ export abstract class Model {
   }
 
   addCustomRelation(attribute: string, callback: Function) {
-    // TODO: Test this feature.
+    // TODO: Test.
     this._relations.push(new CustomRelation(attribute, callback));
   }
 
@@ -160,10 +160,6 @@ export abstract class Model {
     return this.constructor.name;
   }
 
-  // TODO: implement
-  // clone() {
-  // }
-
   toObject () {
     return JSON.parse(this.toJson());
   }
@@ -172,13 +168,18 @@ export abstract class Model {
     return JSON.stringify(this);
   }
 
+  clone() {
+    // TODO: Test.
+    return Object.create(this.constructor.prototype, this.toObject());
+  }
+
   log(message: string) {
     message = `${this.className()} model, ${message}`;
     if (console) {
       if (console.warn) {
-        console.warn(message);
+        console.warn(this.className(), message);
       } else {
-        console.log(message);
+        console.log(this.className(), message);
       }
     }
   }
