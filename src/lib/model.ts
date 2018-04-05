@@ -169,8 +169,7 @@ export abstract class Model {
   }
 
   clone() {
-    // TODO: Test.
-    return Object.create(this.constructor.prototype, this.toObject());
+    // TODO
   }
 
   log(message: string) {
