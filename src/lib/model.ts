@@ -169,7 +169,26 @@ export abstract class Model {
   }
 
   clone() {
-    // TODO
+    return Object.create(
+      Object.getPrototypeOf(this.constructor.prototype),
+      this.propertyDescriptor()
+    );
+  }
+
+  propertyDescriptor() {
+    const attributes = this.toObject();
+    const descriptor = {};
+    for (const prop in attributes) {
+      if (attributes.hasOwnProperty(prop)) {
+        descriptor[prop] = {
+          value : attributes[prop],
+          configurable: true,
+          enumerable: true,
+          writable: true
+        };
+      }
+    }
+    return descriptor;
   }
 
   log(message: string) {
