@@ -1,4 +1,5 @@
-import { Model } from 'ngx-models';
+import { Model } from '../ngx-models-src/model';
+// import { Model } from 'ngx-models';
 
 export class Location extends Model {
   public latitude: number;
