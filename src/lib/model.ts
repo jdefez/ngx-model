@@ -1,6 +1,4 @@
-import { ArrayOfModelsRelation } from './relations/array-of-models';
-import { SingleModelRelation } from './relations/single-model';
-import { CustomRelation } from './relations/custom';
+import { RelationFactory } from './relations/relation-factory';
 import { Attribute } from './attribute';
 import { Relation } from './relation';
 
@@ -89,11 +87,10 @@ export abstract class Model {
     if (this.attributeExists(name)) {
       const attribute = this.findAttribute(name);
 
-      if (attribute.has_formatter) {
+      if (attribute && attribute.has_formatter) {
         value = attribute.formatter.call(null, value);
       }
     }
-
     return value;
   }
 
@@ -130,16 +127,21 @@ export abstract class Model {
 
   // Relations methods
   addSingleModelsRelation(attribute: string, model: any) {
-    this._relations.push(new SingleModelRelation(attribute, model));
+    this._relations.push(
+      RelationFactory.build('single-model', attribute, model)
+    );
   }
 
   addArrayOfModelsRelation(attribute: string, model: any) {
-    this._relations.push(new ArrayOfModelsRelation(attribute, model));
+    this._relations.push(
+      RelationFactory.build('array-of-models', attribute, model)
+    );
   }
 
   addCustomRelation(attribute: string, callback: Function) {
-    // TODO: Test.
-    this._relations.push(new CustomRelation(attribute, callback));
+    this._relations.push(
+      RelationFactory.build('custom', attribute, callback)
+    );
   }
 
   findRelation(attribute: string): Relation {
@@ -157,6 +159,8 @@ export abstract class Model {
   }
 
   className() {
+    // TODO: do not relie on this.
+    //  https://stackoverflow.com/questions/1249531/how-to-get-a-javascript-objects-class
     return this.constructor.name;
   }
 
@@ -196,6 +200,7 @@ export abstract class Model {
     if (console) {
       if (console.warn) {
         console.warn(this.className(), message);
+
       } else {
         console.log(this.className(), message);
       }

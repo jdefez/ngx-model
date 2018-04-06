@@ -3,7 +3,7 @@ export class CustomRelation  extends Relation {
   protected _default: any = null;
 
   constructor(attribute: string, callback?: Function) {
-    super('array-of-models', attribute, null, callback);
+    super('custom', attribute, null, callback);
   }
 
   set(value: any): any {
