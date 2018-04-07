@@ -77,9 +77,9 @@ export abstract class Model {
     return this.attributeExists(name) === false;
   }
 
-  addAttribute(name: string, attribute?: any, formatter?: Function) {
+  addAttribute(name: string, initial_value?: any, formatter?: Function) {
     if (this.attributeDoesNotExists(name)) {
-      this._attributes.push(new Attribute(name, attribute, formatter));
+      this._attributes.push(new Attribute(name, initial_value, formatter));
     }
   }
 
