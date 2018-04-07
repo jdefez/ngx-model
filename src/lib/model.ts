@@ -159,8 +159,6 @@ export abstract class Model {
   }
 
   className() {
-    // TODO: do not relie on this.
-    //  https://stackoverflow.com/questions/1249531/how-to-get-a-javascript-objects-class
     return this.constructor.name;
   }
 
