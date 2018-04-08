@@ -1,0 +1,10 @@
+<p *ngIf="data_not_loaded">
+  Loading &hellip;
+</p>
+
+<ul *ngIf="data_loaded"
+  class="list-style-none">
+  <li *ngFor="let user of this.service.users">
+    <pre class="pre">{{ user | json }}</pre>
+  </li>
+</ul>
