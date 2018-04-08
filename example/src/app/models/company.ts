@@ -10,7 +10,7 @@ export class Company extends Model {
     super(attributes);
   }
 
-  attributesAndRelationsHook() {
+  attributesHook() {
     this.addAttribute('bs');
     this.addAttribute('catchPhrase');
     this.addAttribute('name');

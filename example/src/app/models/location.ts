@@ -10,7 +10,7 @@ export class Location extends Model {
     super(attributes);
   }
 
-  attributesAndRelationsHook() {
+  attributesHook() {
     this.addAttribute('lat', null, Formatters.toFloat);
     this.addAttribute('lng', null, Formatters.toFloat);
   }

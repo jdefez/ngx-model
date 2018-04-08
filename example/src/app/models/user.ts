@@ -18,17 +18,16 @@ export class User extends Model {
     super(attributes);
   }
 
-  attributesAndRelationsHook() {
+  attributesHook() {
     this.addAttribute('id');
     this.addAttribute('name');
     this.addAttribute('username');
     this.addAttribute('email');
     this.addAttribute('phone');
     this.addAttribute('website');
-    this.addAttribute('company');
-    this.addAttribute('address');
-
-    this.addSingleModelsRelation('company', Company);
-    this.addSingleModelsRelation('address', Address);
+    this.addAttribute('company')
+      .setSingleModelsRelation('company', Company);
+    this.addAttribute('address')
+      .setSingleModelsRelation('address', Address);
   }
 }
