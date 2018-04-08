@@ -1,17 +1,14 @@
-import { RelationFactory } from './relations/relation-factory';
 import { Attribute } from './attribute';
 import { Relation } from './relation';
 
 export abstract class Model {
   private _attributes: Array<Attribute> = [];
-  private _relations: Array<Relation> = [];
 
   constructor(attributes?: any) {
     this.setPrivateProperty('_attributes', []);
-    this.setPrivateProperty('_relations', []);
 
     // Collects attributes and relations definition.
-    this.attributesAndRelationsHook();
+    this.attributesHook();
 
     // Sets properties private and public accessor and  mutator by using
     // attribute definitions.
@@ -21,7 +18,7 @@ export abstract class Model {
     this.update(attributes);
   }
 
-  protected abstract attributesAndRelationsHook(): void;
+  protected abstract attributesHook(): void;
 
   update(attributes: any) {
     this.iter(attributes, (prop: string, value: any) => {
@@ -32,23 +29,6 @@ export abstract class Model {
   }
 
   setProperties() {
-    const missing_attribute_definitions = [];
-
-    // Find and set missing attribute definitions found in relation definition.
-    this._relations.forEach((relation: Relation) => {
-      if (this.attributeDoesNotExists(relation.attribute)) {
-        missing_attribute_definitions.push(relation.attribute);
-        this.addAttribute(relation.attribute, relation.default);
-      }
-    });
-
-    if (missing_attribute_definitions.length > 0) {
-      this.log(
-        `Found attribute reference in relations which were not defined as`
-        + ` attribue: ${missing_attribute_definitions.join(', ')}.`
-      );
-    }
-
     this._attributes.forEach((attribute: Attribute) => {
       this.setProperty(attribute);
     });
@@ -59,7 +39,7 @@ export abstract class Model {
     this.setPrivateProperty(attribute.private_name, attribute.default_value);
 
     // Sets property accessor and mutator.
-    this.setAccessorAndMutator(attribute.name, attribute.private_name);
+    this.setAccessorAndMutator(attribute);
   }
 
   // Attribute methods
@@ -77,19 +57,17 @@ export abstract class Model {
     return this.attributeExists(name) === false;
   }
 
-  addAttribute(name: string, attribute?: any, formatter?: Function) {
+  addAttribute(name: string, initial_value?: any, formatter?: Function): Attribute {
     if (this.attributeDoesNotExists(name)) {
-      this._attributes.push(new Attribute(name, attribute, formatter));
+      const attribute = new Attribute(name, initial_value, formatter)
+      this._attributes.push(attribute);
+      return attribute;
     }
   }
 
-  doCast(name: string, value: any) {
-    if (this.attributeExists(name)) {
-      const attribute = this.findAttribute(name);
-
-      if (attribute && attribute.has_formatter) {
-        value = attribute.formatter.call(null, value);
-      }
+  doCast(attribute: Attribute, value: any) {
+    if (attribute.has_formatter) {
+      value = attribute.formatter.call(null, value);
     }
     return value;
   }
@@ -113,47 +91,21 @@ export abstract class Model {
     });
   }
 
-  protected setAccessorAndMutator(name: string, private_name: string) {
-    Object.defineProperty(this, name, {
-      get: () => this[private_name],
+  protected setAccessorAndMutator(attribute: Attribute) {
+    Object.defineProperty(this, attribute.name, {
+      get: () => this[attribute.private_name],
       set: (input: any) => {
-        input = this.applyRelation(name, input);
-        this[private_name] = this.doCast(name, input);
+        input = this.applyRelation(attribute, input);
+        this[attribute.private_name] = this.doCast(attribute, input);
       },
       enumerable: true,
       configurable: true
     });
   }
 
-  // Relations methods
-  addSingleModelsRelation(attribute: string, model: any) {
-    this._relations.push(
-      RelationFactory.build('single-model', attribute, model)
-    );
-  }
-
-  addArrayOfModelsRelation(attribute: string, model: any) {
-    this._relations.push(
-      RelationFactory.build('array-of-models', attribute, model)
-    );
-  }
-
-  addCustomRelation(attribute: string, callback: Function) {
-    this._relations.push(
-      RelationFactory.build('custom', attribute, callback)
-    );
-  }
-
-  findRelation(attribute: string): Relation {
-    return this._relations.find(
-      (relation: Relation) => relation.attribute === attribute
-    );
-  }
-
-  applyRelation(attribute: string, value: any) {
-    const relation = this.findRelation(attribute);
-    if (relation) {
-      value = relation.set(value);
+  applyRelation(attribute: Attribute, value: any) {
+    if (attribute.has_relation) {
+      value = attribute.relation.set(value);
     }
     return value;
   }
