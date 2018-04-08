@@ -1,6 +1,9 @@
 import { Model } from 'ngx-models';
 import { Formatters } from 'ngx-models';
 
+// import { Model } from '../ngx-models-src/model';
+// import { Formatters } from '../ngx-models-src/formatters';
+
 import { Location } from './location';
 
 export class Address extends Model {
@@ -21,6 +24,6 @@ export class Address extends Model {
     this.addAttribute('suite', null, Formatters.toString);
     this.addAttribute('zipcode', null, Formatters.toString);
     this.addAttribute('geo', null)
-      .setSingleModelsRelation('geo', Location);
+      .setSingleModelsRelation(Location);
   }
 }

@@ -1,6 +1,9 @@
 import { Model } from 'ngx-models';
 import { Formatters } from 'ngx-models';
 
+// import { Model } from '../ngx-models-src/model';
+// import { Formatters } from '../ngx-models-src/formatters';
+
 // Utility class to format model values. Can be replaced by formatters of your
 //  own. These are simple function taking a value as parameter and returning a
 //  value: formatter<Function>(value: any): value
