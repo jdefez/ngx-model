@@ -17,6 +17,8 @@ export abstract class Relation {
   // TODO: model interface
   abstract set(value: any): any;
 
+  abstract update(value: any, target: any);
+
   get default() {
     return this._default;
   }

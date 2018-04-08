@@ -7,6 +7,17 @@ export class ArrayOfModelsRelation extends Relation {
     super('array-of-models', attribute, model);
   }
 
+  update(value: any, target: any) {
+    if (this.isArray(value) && this.isArray(target)) {
+      value.forEach((item: any, index) => {
+        const model = target[item];
+        if (typeof model.update === 'function') {
+          model.update(item);
+        }
+      });
+    }
+  }
+
   set(value: any): any {
     // TODO: check value and value items type.
     value = value.map((item) => {
