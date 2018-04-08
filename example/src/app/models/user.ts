@@ -1,5 +1,8 @@
-import { Model } from 'ngx-models';
-import { Formatters } from 'ngx-models';
+ import { Model } from 'ngx-models';
+ import { Formatters } from 'ngx-models';
+
+// import { Model } from '../ngx-models-src/model';
+// import { Formatters } from '../ngx-models-src/formatters';
 
 import { Company } from './company';
 import { Address } from './address';
@@ -26,8 +29,8 @@ export class User extends Model {
     this.addAttribute('phone');
     this.addAttribute('website');
     this.addAttribute('company')
-      .setSingleModelsRelation('company', Company);
+      .setSingleModelsRelation(Company);
     this.addAttribute('address')
-      .setSingleModelsRelation('address', Address);
+      .setSingleModelsRelation(Address);
   }
 }

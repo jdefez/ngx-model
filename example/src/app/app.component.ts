@@ -1,6 +1,7 @@
 import { AppService } from './app.service';
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
+import { User } from './models/user';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,7 @@ import { OnInit } from '@angular/core';
 
 export class AppComponent implements OnInit {
   public data_loaded: boolean;
+  public user: User;
 
   constructor(private service: AppService) { }
 
