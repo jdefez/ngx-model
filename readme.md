@@ -112,20 +112,4 @@ To create a model we simple have create an instance of our model like this:
 this.user = new User(json_data);
 ```
 
-## Updating a model
-
-```
-this.user.name = 'John Graham';
-this.user.address.street = 'Kulas Night';
-```
-
-or
-
-```
-this.user.update({
-  'name' : 'John Graham',
-  'address' : { 'street' : 'Kulas Night'}
-});
-```
-
 
