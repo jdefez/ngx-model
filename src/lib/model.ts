@@ -15,15 +15,31 @@ export abstract class Model {
     this.setProperties();
 
     // Set initial values if any.
-    this.update(attributes);
+    this.create(attributes);
   }
 
   protected abstract attributesHook(): void;
 
-  update(attributes: any) {
+  create(attributes: any) {
     this.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
         this[prop] = value;
+      }
+    });
+  }
+
+  update(attributes: any) {
+    this.iter(attributes, (prop: string, value: any) => {
+      if (this.hasOwnProperty(prop)) {
+        if (this.attributeExists(prop)) {
+          const attribute = this.findAttribute(prop);
+          if (attribute.has_relation) {
+            attribute.relation.update(value, this[prop]);
+          } else {
+            this[prop] = value;
+
+          }
+        }
       }
     });
   }
