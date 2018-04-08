@@ -28,6 +28,22 @@ export abstract class Model {
     });
   }
 
+  update(attributes: any) {
+    this.iter(attributes, (prop: string, value: any) => {
+      if (this.hasOwnProperty(prop)) {
+        if (this.attributeExists(prop)) {
+          const attribute = this.findAttribute(prop);
+          if (attribute.has_relation) {
+            attribute.relation.update(value, this[prop]);
+          } else {
+            this[prop] = value;
+
+          }
+        }
+      }
+    });
+  }
+
   setProperties() {
     this._attributes.forEach((attribute: Attribute) => {
       this.setProperty(attribute);
