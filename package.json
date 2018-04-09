@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "watch --wait=5 'npm run start' src/",
-    "clean": "rm -rf dist example/node_modules",
+    "clean": "rm -rf dist example/node_modules example/src/app/ngx-models-src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/jdefez/ngx-model#readme",
   "devDependencies": {
+    "rxjs": "^5.5.8",
     "typescript": "^2.8.1"
   }
 }

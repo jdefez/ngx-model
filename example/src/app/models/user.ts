@@ -1,8 +1,5 @@
- import { Model } from 'ngx-models';
- import { Formatters } from 'ngx-models';
-
-// import { Model } from '../ngx-models-src/model';
-// import { Formatters } from '../ngx-models-src/formatters';
+import { Formatters } from 'ngx-models';
+import { Model } from 'ngx-models';
 
 import { Company } from './company';
 import { Address } from './address';

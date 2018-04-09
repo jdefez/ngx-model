@@ -20,11 +20,55 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadUsers();
+    // this.testModelSubscription();
+  }
+
+  loadUsers() {
     this.data_loaded = false;
     this.service.getUsers().subscribe(
       (response: any) => this.data_loaded = true,
       (error: any) => this.data_loaded = false
     );
+  }
+
+  testModelSubscription() {
+    /** New user instance */
+    this.user = new User({
+      "id": 1,
+      "name": "Leanne Graham",
+      "username": "Bret",
+      "email": "Sincere@april.biz",
+      "phone": "1-770-736-8031 x56442",
+      "website": "hildegard.org",
+      "company": {
+        "bs": "harness real-time e-markets",
+        "catchPhrase": "Multi-layered client-server neural-net",
+        "name": "Romaguera-Crona"
+      },
+      "address": {
+        "city": "Gwenborough",
+        "street": "Kulas Light",
+        "suite": "Apt. 556",
+        "zipcode": "92998-3874",
+        "geo": {
+          "lat": -37.3159,
+          "lng": 81.1496
+        }
+      }
+    });
+
+    console.log('user.name', this.user.name);
+
+    /** subscribe to user instance onChanges */
+    this.user.onChanges.subscribe(() => {
+      console.log('user.onChanges triggered, name:', this.user.name);
+    });
+
+    /** trigger changes after 2s */
+    setTimeout(() => {
+      this.user.name = `${this.user.name} (updated)`;
+    }, 2000);
   }
 }
 
