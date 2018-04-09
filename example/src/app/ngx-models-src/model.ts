@@ -1,29 +1,21 @@
 import { Subject } from "rxjs/Subject";
+import { Observable } from "rxjs/Observable";
 import { Attribute } from './attribute';
 import { Relation } from './relation';
 
+// https://netbasal.com/understanding-subjects-in-rxjs-55102a190f3
 // https://netbasal.com/rxjs-subjects-for-human-beings-7807818d4e4d
 // https://blog.cloudboost.io/build-simple-shopping-cart-with-angular-4-observables-subject-subscription-part-2-2d3735cde5f
 
-// @Injectable()
-// export class cartService {
-//   constructor(
-//   ) { }
-//   private cartSubject  = new Subject<CartState>();
-//   Products : product[] = [];
-//   CartState            = this.cartSubject.asObservable();
-// 
-//   addProduct(_product:any) {
-//     this.Products.push(_product)
-//     this.cartSubject.next(<CartState>{loaded: true, products:    this.Products});
-//   }
-// }
-
 export abstract class Model {
-  private _attributes: Array<Attribute> = [];
+  private _subject: Subject<any>;
+  private _observable: Observable<any>;
+  private _attributes: Array<Attribute>;
 
   constructor(attributes?: any) {
     this.setPrivateProperty('_attributes', []);
+    this.setPrivateProperty('_subject', new Subject());
+    this.setPrivateProperty('_observable',  this._subject.asObservable());
 
     // Collects attributes and relations definition.
     this.attributesHook();
@@ -61,9 +53,9 @@ export abstract class Model {
     });
   }
 
-  // get onChanges(): Observable<null> {
-    // return this._observable;
-  // }
+  get onChanges(): Observable<any> {
+    return this._observable;
+  }
 
   setProperties() {
     this._attributes.forEach((attribute: Attribute) => {
@@ -134,6 +126,7 @@ export abstract class Model {
       set: (input: any) => {
         input = this.applyRelation(attribute, input);
         this[attribute.private_name] = this.doCast(attribute, input);
+        this._subject.next();
       },
       enumerable: true,
       configurable: true
