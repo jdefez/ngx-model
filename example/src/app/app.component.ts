@@ -20,6 +20,20 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadUsers();
+    // this.testModelSubscription();
+  }
+
+  loadUsers() {
+    this.data_loaded = false;
+    this.service.getUsers().subscribe(
+      (response: any) => this.data_loaded = true,
+      (error: any) => this.data_loaded = false
+    );
+  }
+
+  testModelSubscription() {
+    /** New user instance */
     this.user = new User({
       "id": 1,
       "name": "Leanne Graham",
@@ -44,20 +58,17 @@ export class AppComponent implements OnInit {
       }
     });
 
+    console.log('user.name', this.user.name);
+
+    /** subscribe to user instance onChanges */
     this.user.onChanges.subscribe(() => {
-      console.log('name', this.user.name);
+      console.log('user.onChanges triggered, name:', this.user.name);
     });
 
+    /** trigger changes after 2s */
     setTimeout(() => {
       this.user.name = `${this.user.name} (updated)`;
     }, 2000);
-
-
-    this.data_loaded = false;
-    this.service.getUsers().subscribe(
-      (response: any) => this.data_loaded = true,
-      (error: any) => this.data_loaded = false
-    );
   }
 }
 

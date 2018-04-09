@@ -1,8 +1,5 @@
-// import { Model } from 'ngx-models';
-// import { Formatters } from 'ngx-models';
-
-import { Model } from '../ngx-models-src/model';
-import { Formatters } from '../ngx-models-src/formatters';
+import { Formatters } from 'ngx-models';
+import { Model } from 'ngx-models';
 
 export class Tag extends Model {
   public id: number;
