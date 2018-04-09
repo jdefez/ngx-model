@@ -2,7 +2,9 @@ import { Subject } from "rxjs/Subject";
 import { Attribute } from './attribute';
 import { Relation } from './relation';
 
+// https://netbasal.com/rxjs-subjects-for-human-beings-7807818d4e4d
 // https://blog.cloudboost.io/build-simple-shopping-cart-with-angular-4-observables-subject-subscription-part-2-2d3735cde5f
+
 // @Injectable()
 // export class cartService {
 //   constructor(
