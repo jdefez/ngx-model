@@ -1,5 +1,21 @@
+import { Subject } from "rxjs/Subject";
 import { Attribute } from './attribute';
 import { Relation } from './relation';
+
+// https://blog.cloudboost.io/build-simple-shopping-cart-with-angular-4-observables-subject-subscription-part-2-2d3735cde5f
+// @Injectable()
+// export class cartService {
+//   constructor(
+//   ) { }
+//   private cartSubject  = new Subject<CartState>();
+//   Products : product[] = [];
+//   CartState            = this.cartSubject.asObservable();
+// 
+//   addProduct(_product:any) {
+//     this.Products.push(_product)
+//     this.cartSubject.next(<CartState>{loaded: true, products:    this.Products});
+//   }
+// }
 
 export abstract class Model {
   private _attributes: Array<Attribute> = [];
@@ -37,12 +53,15 @@ export abstract class Model {
             attribute.relation.update(value, this[prop]);
           } else {
             this[prop] = value;
-
           }
         }
       }
     });
   }
+
+  // get onChanges(): Observable<null> {
+    // return this._observable;
+  // }
 
   setProperties() {
     this._attributes.forEach((attribute: Attribute) => {
