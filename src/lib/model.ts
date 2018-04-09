@@ -1,26 +1,39 @@
 import { Attribute } from './attribute';
 import { Relation } from './relation';
 
+import { Observable } from "rxjs/Observable";
+import { Subject } from "rxjs/Subject";
+
 export abstract class Model {
   private _attributes: Array<Attribute> = [];
+  private _subject: Subject<any>;
+  private _observable: Observable<any>;
 
   constructor(attributes?: any) {
     this.setPrivateProperty('_attributes', []);
+    this.setPrivateProperty('_subject', new Subject());
+    this.setPrivateProperty('_observable',  this._subject.asObservable());
 
-    // Collects attributes and relations definition.
+    /** Collects attributes and relations definition. */
     this.attributesHook();
 
-    // Sets properties private and public accessor and  mutator by using
-    // attribute definitions.
-    this.setProperties();
+    /**
+     * Sets private properties and public accessor and  mutator by using
+     * attribute definitions.
+     */
+    this.setProperties(this._attributes);
 
-    // Set initial values if any.
-    this.create(attributes);
+    /** Set initial values if any. */
+    this.update(attributes);
   }
 
   protected abstract attributesHook(): void;
 
-  create(attributes: any) {
+  get onChanges(): Observable<any> {
+    return this._observable;
+  }
+
+  update(attributes: any) {
     this.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
         this[prop] = value;
@@ -28,21 +41,18 @@ export abstract class Model {
     });
   }
 
-  setProperties() {
-    this._attributes.forEach((attribute: Attribute) => {
+  setProperties(attributes: Array<Attribute>) {
+    attributes.forEach((attribute: Attribute) => {
       this.setProperty(attribute);
     });
   }
 
   setProperty(attribute: Attribute) {
-    // Sets private property.
     this.setPrivateProperty(attribute.private_name, attribute.default_value);
-
-    // Sets property accessor and mutator.
     this.setAccessorAndMutator(attribute);
   }
 
-  // Attribute methods
+  /** Attribute methods */
   findAttribute(name: string): Attribute {
     return this._attributes.find(
       (attribute: Attribute) => attribute.name === name
@@ -97,6 +107,7 @@ export abstract class Model {
       set: (input: any) => {
         input = this.applyRelation(attribute, input);
         this[attribute.private_name] = this.doCast(attribute, input);
+        this._subject.next();
       },
       enumerable: true,
       configurable: true
@@ -150,7 +161,6 @@ export abstract class Model {
     if (console) {
       if (console.warn) {
         console.warn(this.className(), message);
-
       } else {
         console.log(this.className(), message);
       }
