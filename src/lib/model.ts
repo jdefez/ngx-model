@@ -6,13 +6,24 @@ import { Subject } from "rxjs/Subject";
 
 export abstract class Model {
   private _attributes: Array<Attribute> = [];
-  private _subject: Subject<any>;
-  private _observable: Observable<any>;
+  private _subject_changes: Subject<any>;
+  private _subject_created: Subject<any>;
+  private _subject_patched: Subject<any>;
+
+  private _observable_changes: Observable<any>;
+  // private _observable_created: Observable<any>;
+  private _observable_patched: Observable<any>;
 
   constructor(attributes?: any) {
     this.setPrivateProperty('_attributes', []);
-    this.setPrivateProperty('_subject', new Subject());
-    this.setPrivateProperty('_observable',  this._subject.asObservable());
+
+    this.setPrivateProperty('_subject_changes', new Subject());
+    this.setPrivateProperty('_subject_created', new Subject());
+    this.setPrivateProperty('_subject_patched', new Subject());
+
+    this.setPrivateProperty('_observable_changes', this._subject_changes.asObservable());
+    // this.setPrivateProperty('_observable_created', this._subject_created.asObservable());
+    this.setPrivateProperty('_observable_patched', this._subject_patched.asObservable());
 
     /** Collects attributes and relations definition. */
     this.attributesHook();
@@ -24,21 +35,48 @@ export abstract class Model {
     this.setProperties(this._attributes);
 
     /** Set initial values if any. */
-    this.update(attributes);
+    this.create(attributes);
   }
 
   protected abstract attributesHook(): void;
 
   get onChanges(): Observable<any> {
-    return this._observable;
+    return this._observable_changes;
   }
 
-  update(attributes: any) {
+  // get onCreated(): Observable<any> {
+  //   return this._observable_created;
+  // }
+
+  get onPatched(): Observable<any> {
+    return this._observable_patched;
+  }
+
+  create(attributes: any) {
     this.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
         this[prop] = value;
       }
     });
+    // this._observable_created.next();
+  }
+
+  patch(attributes: any) {
+    let patched = {};
+    this.iter(attributes, (prop: string, value: any) => {
+      if (this.hasOwnProperty(prop)) {
+        const previousValue = this[prop];
+        this[prop] = value;
+
+        if (value !== this[prop]) {
+          patched[prop] = {
+            previousValue: previousValue,
+            currentValue: this[prop]
+          };
+        }
+      }
+    });
+    this._observable_patched.next(patched);
   }
 
   setProperties(attributes: Array<Attribute>) {
@@ -105,9 +143,11 @@ export abstract class Model {
     Object.defineProperty(this, attribute.name, {
       get: () => this[attribute.private_name],
       set: (input: any) => {
+        const changes = {currentValue: null, previousValue : this[attribute.private_name]};
         input = this.applyRelation(attribute, input);
         this[attribute.private_name] = this.doCast(attribute, input);
-        this._subject.next();
+        changes.currentValue = this[attribute.private_name];
+        this._subject_changes.next(changes);
       },
       enumerable: true,
       configurable: true
