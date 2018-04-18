@@ -60,10 +60,10 @@ export abstract class Model {
         const previousValue = this[prop];
         this[prop] = value;
 
-        if (value !== this[prop]) {
+        if (previousValue !== value) {
           patched[prop] = {
             previousValue: previousValue,
-            currentValue: this[prop]
+            currentValue: value
           };
         }
       }
