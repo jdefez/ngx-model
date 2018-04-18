@@ -1,5 +1,9 @@
-import { Formatters } from 'ngx-models';
-import { Model } from 'ngx-models';
+import { Formatters } from '../ngx-models-src/formatters';
+import { Model } from '../ngx-models-src/model';
+
+// import { Formatters } from 'ngx-models';
+// import { Model } from 'ngx-models';
+
 import { Location } from './location';
 
 export class Address extends Model {

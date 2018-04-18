@@ -17,9 +17,9 @@ export abstract class Model {
     this.setPrivateProperty('_attributes', []);
 
     this.setPrivateProperty('_subject_changes', new Subject());
-    this.setPrivateProperty('_observable_changes', this._subject_changes.asObservable());
-
     this.setPrivateProperty('_subject_patched', new Subject());
+
+    this.setPrivateProperty('_observable_changes', this._subject_changes.asObservable());
     this.setPrivateProperty('_observable_patched', this._subject_patched.asObservable());
 
     /** Collects attributes and relations definition. */
