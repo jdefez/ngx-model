@@ -1,5 +1,8 @@
-import { Formatters } from 'ngx-models';
-import { Model } from 'ngx-models';
+import { Formatters } from '../ngx-models-src/formatters';
+import { Model } from '../ngx-models-src/model';
+
+// import { Formatters } from 'ngx-models';
+// import { Model } from 'ngx-models';
 
 export class Location extends Model {
   public lat: number;
