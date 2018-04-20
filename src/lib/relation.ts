@@ -2,8 +2,8 @@ import { Model } from './model';
 
 export abstract class Relation {
   protected _default: any = null;
+  protected _callback: Function;
   private _attribute: string;
-  private _callback: Function;
   private _type: string;
   private _model: any;
 
