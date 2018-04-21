@@ -20,8 +20,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.loadUsers();
-    this.testModelSubscription();
+    this.loadUsers();
+    // this.testModelSubscription();
   }
 
   loadUsers() {
@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
       }
     });
 
-    // console.log('user.name', this.user.name);
+    console.log('user.name', this.user.name);
 
     /** subscribe to user instance onChanges */
     // this.user.onChanges.subscribe((changes: any) => {
@@ -77,7 +77,6 @@ export class AppComponent implements OnInit {
     /** trigger changes after 2s */
     setTimeout(() => {
       this.user.patch({'name' : 'Leanny Graham' });
-      // this.user.name = `${this.user.name} (updated)`;
     }, 2000);
   }
 }

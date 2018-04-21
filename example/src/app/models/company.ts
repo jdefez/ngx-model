@@ -1,5 +1,5 @@
-// import { Formatters } from '../ngx-models-src/formatters';
-// import { Model } from '../ngx-models-src/model';
+// import { Formatters } from '../../../../src/lib/formatters';
+// import { Model } from '../../../../src/lib/model';
 
 import { Formatters } from 'ngx-models';
 import { Model } from 'ngx-models';
@@ -17,5 +17,9 @@ export class Company extends Model {
     this.addAttribute('bs');
     this.addAttribute('catchPhrase');
     this.addAttribute('name');
+  }
+
+  get full_name(): string {
+    return `${this.name} ${this.bs}`;
   }
 }
