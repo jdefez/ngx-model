@@ -36,7 +36,11 @@ export class Attribute {
   }
 
   get default_value(): any {
-    return this._default_value;
+    if (this.has_relation) {
+      return this.relation.default;
+    } else {
+      return this._default_value;
+    }
   }
 
   get formatter(): Function | null {
