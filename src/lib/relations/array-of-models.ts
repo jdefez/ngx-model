@@ -7,12 +7,15 @@ export class ArrayOfModelsRelation extends Relation {
     super('array-of-models', attribute, model);
   }
 
-  set(value: any): any {
-    // TODO: check value and value items type.
-    value = value.map((item) => {
-      const model = this.model;
-      return new model(item);
-    });
+  set(value: Array<any>): any {
+    if (this.isArray(value)) {
+      value = value.map((item) => {
+        const model = this.model;
+        return new model(item);
+      });
+    } else {
+      value = this.default;
+    }
     return value;
   }
 
