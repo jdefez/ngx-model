@@ -10,9 +10,11 @@ export class RelationFactory {
     } else if (type === 'single-model') {
       return new SingleModelRelation(attribute, model);
 
-    } else if (type === 'custom-relation') {
+    } else if (type === 'custom') {
       return new CustomRelation(attribute, callback);
 
+    } else {
+      throw new Error(`Requesting unknown relation: ${type}`);
     }
   }
 }
