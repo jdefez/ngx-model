@@ -188,6 +188,78 @@ export abstract class Model {
     return descriptor;
   }
 
+  public dump(value?: any, indent=0) {
+    if (!value) {
+      value = this;
+    }
+
+    for (const prop in value) {
+      if (value.hasOwnProperty(prop)) {
+        const name = this.getType(value[prop]);
+        if (this.isIterable(value[prop])) {
+          if (name === 'Array') {
+            console.log(`${prop}: ${name} [`);
+            this.dump(value[prop])
+            console.log(`]`);
+          } else {
+            console.log(`${prop}: ${name} {`);
+            this.dump(value[prop])
+            console.log(`}`);
+          }
+        } else {
+          // TODO: quote dumped strings
+          if (name === 'String') {
+            console.log(`${prop}: ${name} "${value[prop]}"`);
+          } else {
+            console.log(`${prop}: ${name} ${value[prop]}`);
+          }
+        }
+      }
+    }
+  }
+
+  toSnakeCase(name: string): string {
+    const arr = name.split('');
+    arr[0] = arr[0].toUpperCase();
+    return arr.join('');
+  }
+
+  getType(obj: any): string {
+    let name = '';
+    let type = typeof obj;
+
+    if (!obj) {
+      name = String(obj);
+
+    } else if (type === 'object') {
+      if (typeof obj.join === 'function') {
+        name = `Array (${obj.length})`;
+
+      } else if (typeof obj.attributesHook === 'function') {
+        name = 'model';
+
+      } else {
+        name = 'object';
+      }
+
+    } else {
+      name = type;
+    }
+
+    return this.toSnakeCase(name);
+  }
+
+  isIterable(obj: any): boolean {
+    return (
+      obj
+      && typeof obj !== 'string'
+      && (
+        typeof obj[Symbol.iterator] === 'function'
+        || typeof obj.dump === 'function'
+      )
+    );
+  }
+
   log(message: string) {
     message = `${this.className()} model, ${message}`;
     if (console) {
