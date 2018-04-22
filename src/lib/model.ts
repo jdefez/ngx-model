@@ -153,10 +153,6 @@ export abstract class Model {
     return value;
   }
 
-  className() {
-    return this.constructor.name;
-  }
-
   public toObject () {
     return JSON.parse(this.toJson());
   }
@@ -188,6 +184,7 @@ export abstract class Model {
     return descriptor;
   }
 
+  /** Dump methods */
   public dump(value?: any, indent=0): string {
     let res = '';
     if (!value) {
@@ -311,16 +308,5 @@ export abstract class Model {
         || typeof obj.dump === 'function'
       )
     );
-  }
-
-  log(message: string) {
-    message = `${this.className()} model, ${message}`;
-    if (console) {
-      if (console.warn) {
-        console.warn(this.className(), message);
-      } else {
-        console.log(this.className(), message);
-      }
-    }
   }
 }
