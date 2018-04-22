@@ -157,15 +157,15 @@ export abstract class Model {
     return this.constructor.name;
   }
 
-  toObject () {
+  public toObject () {
     return JSON.parse(this.toJson());
   }
 
-  toJson(): any {
+  public toJson(): any {
     return JSON.stringify(this);
   }
 
-  clone() {
+  public clone() {
     return Object.create(
       Object.getPrototypeOf(this.constructor.prototype),
       this.propertyDescriptor()
@@ -188,34 +188,50 @@ export abstract class Model {
     return descriptor;
   }
 
-  public dump(value?: any, indent=0) {
+  public dump(value?: any, indent=0): string {
+    let res = '';
     if (!value) {
       value = this;
     }
+    const padLen = indent * 2;
+    const nextIndent = indent + 1;
 
     for (const prop in value) {
       if (value.hasOwnProperty(prop)) {
         const name = this.getType(value[prop]);
         if (this.isIterable(value[prop])) {
           if (name === 'Array') {
-            console.log(`${prop}: ${name} [`);
-            this.dump(value[prop])
-            console.log(`]`);
+            res += this.padStart(`${prop}: ${name} (${value[prop].length}) [\n`, padLen);
+            res += this.padStart(this.dump(value[prop], nextIndent), padLen);
+            res += this.padStart(`],\n`, padLen);
+
           } else {
-            console.log(`${prop}: ${name} {`);
-            this.dump(value[prop])
-            console.log(`}`);
+            const objLen = Object.keys(value[prop]).length;
+            res += this.padStart(`${prop}: ${name} (${objLen}) {\n`, padLen);
+            res += this.padStart(this.dump(value[prop], nextIndent), padLen);
+            res += this.padStart(`},\n`, padLen);
           }
+
         } else {
-          // TODO: quote dumped strings
           if (name === 'String') {
-            console.log(`${prop}: ${name} "${value[prop]}"`);
+            res += this.padStart(`${prop}: ${name} (${value[prop].length}) "${value[prop]}",\n`, padLen);
+
           } else {
-            console.log(`${prop}: ${name} ${value[prop]}`);
+            res += this.padStart(`${prop}: ${name} ${value[prop]},\n`, padLen);
+
           }
         }
       }
     }
+    return res;
+  }
+
+  padStart(str: string, len: number, padString="."): string {
+    let arr = [];
+    arr.length = len;
+    arr = arr.fill(padString, 0, len);
+    arr.push(str);
+    return arr.join('');
   }
 
   toSnakeCase(name: string): string {
@@ -233,7 +249,7 @@ export abstract class Model {
 
     } else if (type === 'object') {
       if (typeof obj.join === 'function') {
-        name = `Array (${obj.length})`;
+        name = `Array`;
 
       } else if (typeof obj.attributesHook === 'function') {
         name = 'model';
