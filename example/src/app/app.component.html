@@ -8,3 +8,6 @@
     <pre class="pre">{{ user | json }}</pre>
   </li>
 </ul>
+
+<pre *ngIf="user"
+  class="pre">{{ user.dump() }}</pre>

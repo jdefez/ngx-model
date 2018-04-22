@@ -193,43 +193,80 @@ export abstract class Model {
     if (!value) {
       value = this;
     }
-    const padLen = indent * 2;
-    const nextIndent = indent + 1;
 
-    for (const prop in value) {
-      if (value.hasOwnProperty(prop)) {
-        const name = this.getType(value[prop]);
-        if (this.isIterable(value[prop])) {
-          if (name === 'Array') {
-            res += this.padStart(`${prop}: ${name} (${value[prop].length}) [\n`, padLen);
-            res += this.padStart(this.dump(value[prop], nextIndent), padLen);
-            res += this.padStart(`],\n`, padLen);
+    if (indent === 0) {
+      res = `Model (${Object.keys(value).length}) {\n`;
+    }
+    indent += 1;
 
-          } else {
-            const objLen = Object.keys(value[prop]).length;
-            res += this.padStart(`${prop}: ${name} (${objLen}) {\n`, padLen);
-            res += this.padStart(this.dump(value[prop], nextIndent), padLen);
-            res += this.padStart(`},\n`, padLen);
-          }
+    let count = 0;
+    let inputLen = 0;
+    if (value.length) {
+      inputLen = value.length;
+    } else if (typeof value === 'object') {
+      inputLen = Object.keys(value).length;
+    }
 
-        } else {
-          if (name === 'String') {
-            res += this.padStart(`${prop}: ${name} (${value[prop].length}) "${value[prop]}",\n`, padLen);
+    this.iter(value, (prop: string, input: any) => {
+      const isLast = count === inputLen - 1;
+      if (this.isIterable(input)) {
+        res += this.dumpIterable(prop, input, indent, isLast);
 
-          } else {
-            res += this.padStart(`${prop}: ${name} ${value[prop]},\n`, padLen);
-
-          }
-        }
+      } else {
+        res += this.dumpAttribute(prop, input, indent, isLast);
       }
+      count++;
+    });
+
+    if (indent <= 1) {
+      res += `}`;
     }
     return res;
   }
 
-  padStart(str: string, len: number, padString="."): string {
+  dumpIterable(prop: string, input: any, indent, isLast): string {
+    let res = '';
+    const name = this.getType(input);
+    if (name === 'Array') {
+      res += this.padStart(`${prop}: ${name} (${input.length}) [\n`, indent);
+      res += this.dump(input, indent);
+      res += this.padStart(`]`, indent);
+
+    } else {
+      const objLen = Object.keys(input).length;
+      res += this.padStart(`${prop}: ${name} (${objLen}) {\n`, indent);
+      res += this.dump(input, indent);
+      res += this.padStart(`}`, indent);
+    }
+    res += this.dumpEol(isLast);
+    return res;
+  }
+
+  dumpAttribute(prop: string, input: any, indent, isLast): string {
+    let res = '';
+    const name = this.getType(input);
+    if (name === 'String') {
+      res += this.padStart(`${prop}: ${name} (${input.length}) "${input}"`, indent);
+
+    } else {
+      res += this.padStart(`${prop}: ${name} ${input}`, indent);
+    }
+    res += this.dumpEol(isLast);
+    return res;
+  }
+
+  dumpEol(isLast) {
+    if (isLast) {
+      return '\n';
+    } else {
+      return ',\n';
+    }
+  }
+
+  padStart(str: string, indent: number, padString="  "): string {
     let arr = [];
-    arr.length = len;
-    arr = arr.fill(padString, 0, len);
+    arr.length = indent;
+    arr = arr.fill(padString, 0, indent);
     arr.push(str);
     return arr.join('');
   }

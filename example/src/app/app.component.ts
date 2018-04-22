@@ -20,16 +20,19 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadUsers();
-    // this.testModelSubscription();
+    // this.loadUsers();
+    this.testModelSubscription();
   }
 
   loadUsers() {
     this.data_loaded = false;
     this.service.getUsers().subscribe(
-      (response: any) => this.data_loaded = true,
-      (error: any) => this.data_loaded = false
-    );
+      (response: any) => {
+        this.data_loaded = true;
+
+      }, (error: any) => {
+        this.data_loaded = false;
+      });
   }
 
   testModelSubscription() {
@@ -55,17 +58,21 @@ export class AppComponent implements OnInit {
           "lat": -37.3159,
           "lng": 81.1496
         }
-      }
+      }, 'tags' : [{
+        "id" : "9",
+        "name" : "lazy"
+      }, {
+        "id" : "109",
+        "name" : "late"
+      }]
     });
 
-    console.log('user.name', this.user.name);
-
     /** subscribe to user instance onChanges */
-    // this.user.onChanges.subscribe((changes: any) => {
-    //   console.log('user.onChanges triggered');
-    //   console.log('changes:', changes);
-    //   console.log('user', this.user);
-    // });
+    //this.user.onChanges.subscribe((changes: any) => {
+      //console.log('user.onChanges triggered');
+      //console.log('changes:', changes);
+      //console.log('user', this.user);
+    //});
 
     /**  subscribe to user instance onPatched */
     this.user.onPatched.subscribe((changes: any) => {
@@ -76,7 +83,16 @@ export class AppComponent implements OnInit {
 
     /** trigger changes after 2s */
     setTimeout(() => {
-      this.user.patch({'name' : 'Leanny Graham' });
+      this.user.patch({
+        'name' : 'Leanny Graham (updated)',
+        'tags' : [{
+          id: "112",
+          name: "alaways lazy",
+        }, {
+          id: "102",
+          name: "alaways late",
+        }]
+      });
     }, 2000);
   }
 }
