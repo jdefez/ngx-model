@@ -272,7 +272,7 @@ export abstract class Model {
   }
 
   toSnakeCase(name: string): string {
-    const arr = name.split('');
+    const arr = String(name).split('');
     arr[0] = arr[0].toUpperCase();
     return arr.join('');
   }
