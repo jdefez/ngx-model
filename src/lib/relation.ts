@@ -1,6 +1,6 @@
 export abstract class Relation {
-  protected _default: any = null;
   protected _callback: Function;
+  protected _default: any = null;
   private _type: string;
   private _model: any;
 
