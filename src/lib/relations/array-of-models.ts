@@ -3,8 +3,8 @@ import { Relation } from '../relation';
 export class ArrayOfModelsRelation extends Relation {
   protected _default: any = [];
 
-  constructor(attribute: string, model: any) {
-    super('array-of-models', attribute, model);
+  constructor(model: any) {
+    super('array-of-models', model);
   }
 
   set(value: Array<any>): any {

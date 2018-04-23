@@ -15,17 +15,16 @@ export class Attribute {
 
   // Relations methods
   setSingleModelsRelation(model: any) {
-    this._relation = RelationFactory.build('single-model', this.name, model);
+    this._relation = RelationFactory.build('single-model', model);
   }
 
   setArrayOfModelsRelation(model: any) {
-    this._relation = RelationFactory.build('array-of-models', this.name, model);
+    this._relation = RelationFactory.build('array-of-models', model);
   }
 
   setCustomRelation(callback: Function) {
-    this._relation = RelationFactory.build('custom', this.name, null, callback);
+    this._relation = RelationFactory.build('custom', callback);
   }
-
 
   get name(): string {
     return this._name;

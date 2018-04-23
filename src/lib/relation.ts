@@ -1,28 +1,19 @@
-import { Model } from './model';
-
 export abstract class Relation {
   protected _default: any = null;
   protected _callback: Function;
-  private _attribute: string;
   private _type: string;
   private _model: any;
 
-  constructor(type: string, attribute: string, model: any, callback?: Function) {
-    this._attribute = attribute;
+  constructor(type: string, model?: any, callback?: Function) {
+    this._callback = callback;
     this._model = model;
     this._type = type;
-    this._callback = callback;
   }
 
-  // TODO: model interface
   abstract set(value: any): any;
 
   get default() {
     return this._default;
-  }
-
-  get attribute(): string {
-    return this._attribute;
   }
 
   get type(): string {
