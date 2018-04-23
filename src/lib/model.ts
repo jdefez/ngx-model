@@ -105,7 +105,7 @@ export abstract class Model {
     }
   }
 
-  doCast(attribute: Attribute, value: any) {
+  cast(attribute: Attribute, value: any) {
     if (attribute.has_formatter) {
       value = attribute.formatter.call(null, value);
     }
@@ -137,7 +137,7 @@ export abstract class Model {
       set: (input: any) => {
         const changes = {currentValue: null, previousValue : this[attribute.private_name]};
         input = this.applyRelation(attribute, input);
-        this[attribute.private_name] = this.doCast(attribute, input);
+        this[attribute.private_name] = this.cast(attribute, input);
         changes.currentValue = this[attribute.private_name];
         this._subject_changes.next(changes);
       },
