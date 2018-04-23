@@ -1,7 +1,6 @@
+import { Observable } from "rxjs/Observable";
 import { Attribute } from './attribute';
 import { Relation } from './relation';
-
-import { Observable } from "rxjs/Observable";
 import { Subject } from "rxjs/Subject";
 
 export abstract class Model {
@@ -105,7 +104,7 @@ export abstract class Model {
     }
   }
 
-  cast(attribute: Attribute, value: any) {
+  cast(attribute: Attribute, value: any): any {
     if (attribute.has_formatter) {
       value = attribute.formatter.call(null, value);
     }
@@ -146,7 +145,7 @@ export abstract class Model {
     });
   }
 
-  applyRelation(attribute: Attribute, value: any) {
+  applyRelation(attribute: Attribute, value: any): any {
     if (attribute.has_relation) {
       value = attribute.relation.set(value);
     }
@@ -168,7 +167,7 @@ export abstract class Model {
     );
   }
 
-  propertyDescriptor() {
+  propertyDescriptor(): any {
     const attributes = this.toObject();
     const descriptor = {};
     for (const prop in attributes) {
@@ -252,7 +251,7 @@ export abstract class Model {
     return res;
   }
 
-  dumpEol(isLast) {
+  dumpEol(isLast): string {
     if (isLast) {
       return '\n';
     } else {
@@ -283,7 +282,7 @@ export abstract class Model {
 
     } else if (type === 'object') {
       if (typeof obj.join === 'function') {
-        name = `Array`;
+        name = `array`;
 
       } else if (typeof obj.attributesHook === 'function') {
         name = 'model';
