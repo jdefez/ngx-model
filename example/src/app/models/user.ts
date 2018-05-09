@@ -1,8 +1,8 @@
-import { Formatters } from '../../../../src/lib/formatters';
-import { Model } from '../../../../src/lib/model';
+//import { Formatters } from '../../../../src/lib/formatters';
+//import { Model } from '../../../../src/lib/model';
 
-// import { Formatters } from 'ngx-models';
-// import { Model } from 'ngx-models';
+import { Formatters } from 'ngx-models';
+import { Model } from 'ngx-models';
 
 import { Company } from './company';
 import { Address } from './address';
@@ -34,7 +34,7 @@ export class User extends Model {
       .setSingleModelsRelation(Company);
     this.addAttribute('address')
       .setSingleModelsRelation(Address);
-    this.addAttribute('tags')
-      .setArrayOfModelsRelation(Tag);
+
+    this.addAttribute('tags').setArrayOfModelsRelation(Tag);
   }
 }
