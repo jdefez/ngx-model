@@ -23,7 +23,7 @@ export class Attribute {
   }
 
   setCustomRelation(callback: Function) {
-    this._relation = RelationFactory.build('custom', callback);
+    this._relation = RelationFactory.build('custom', null, callback);
   }
 
   get name(): string {
