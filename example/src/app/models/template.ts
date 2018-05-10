@@ -27,14 +27,14 @@ export class TemplateModel extends Model {
 
     // Relation of type attribute:string : ModelChildClass
     // this.addAttribute('sample')
-    //   .setSingleModelsRelation(attribure_name: string, model: ModelChildClass);
+    //   .setSingleModelsRelation(model: ModelChildClass);
 
     // Relation of type Array<ModelChildClass>
     // this.addAttribute('sample')
-    //   .setArrayOfModelsRelation(attribure_name: string, model: ModelChildClass);
+    //   .setArrayOfModelsRelation(model: ModelChildClass);
 
     // Relation to deal with poorly designed json api.
     // this.addAttribute('sample')
-    //   .setCustomRelation(attribure_name: string, callback: Function)
+    //   .setCustomRelation(callback: Function)
   }
 }

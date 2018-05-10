@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import 'rxjs/add/operator/shareReplay';
 
 import { User } from './models/user';
 
@@ -13,7 +12,7 @@ export class AppService {
   constructor(private http: HttpClient) { }
 
   getUsers() {
-    const obs = this.http.get(this._get_users_url).shareReplay();
+    const obs = this.http.get(this._get_users_url);
 
     obs.subscribe(
       (response: any) => {
@@ -22,8 +21,7 @@ export class AppService {
             (item: any) => this.users.push(new User(item))
           );
         }
-      },
-      (error: any) => { console.log('error', error); }
+      }, (error: any) => { console.log('error', error); }
     );
 
     return obs;
