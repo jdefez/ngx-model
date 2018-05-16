@@ -57,13 +57,11 @@ export abstract class Model {
     this.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
         const previousValue = this[prop];
-        this[prop] = value;
 
         if (previousValue !== value) {
-          patched[prop] = {
-            previousValue: previousValue,
-            currentValue: value
-          };
+          patched[prop] = { previousValue : previousValue };
+          this[prop] = value;
+          patched[prop].currentValue = this[prop];
         }
       }
     });
@@ -134,10 +132,20 @@ export abstract class Model {
     Object.defineProperty(this, attribute.name, {
       get: () => this[attribute.private_name],
       set: (input: any) => {
-        const changes = {currentValue: null, previousValue : this[attribute.private_name]};
-        input = this.applyRelation(attribute, input);
-        this[attribute.private_name] = this.cast(attribute, input);
-        changes.currentValue = this[attribute.private_name];
+        if (attribute.has_relation) {
+          input = this.applyRelation(attribute, input);
+        } else {
+          input = this.cast(attribute, input);
+        }
+
+        let changes = {};
+        changes[attribute.name] = {
+          currentValue : input,
+          previousValue : this[attribute.private_name]
+        };
+
+        this[attribute.private_name] = input;
+
         this._subject_changes.next(changes);
       },
       enumerable: true,
