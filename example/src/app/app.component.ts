@@ -2,6 +2,7 @@ import { AppService } from './app.service';
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { User } from './models/user';
+import { Tag } from './models/tag';
 
 @Component({
   selector: 'app-root',
@@ -67,21 +68,20 @@ export class AppComponent implements OnInit {
       }]
     });
 
-    /** subscribe to user instance onChanges */
-    //this.user.onChanges.subscribe((changes: any) => {
-      //console.log('user.onChanges triggered');
-      //console.log('changes:', changes);
-      //console.log('user', this.user);
-    //});
+    // this.changesSubscriptionTest();
 
+    this.patchSubscriptionTest();
+  }
+
+  patchSubscriptionTest() {
     /**  subscribe to user instance onPatched */
-    this.user.onPatched.subscribe((changes: any) => {
+    const sub = this.user.onPatched.subscribe((changes: any) => {
       console.log('user.onPatched triggered');
-      console.log('changes:', changes);
-      console.log('user', this.user);
+      console.log('patched:', changes);
+      console.log('user', this.user.dump());
     });
 
-    /** trigger changes after 2s */
+    /** triggers Model.patch after 2s */
     setTimeout(() => {
       this.user.patch({
         'name' : 'Leanny Graham (updated)',
@@ -94,6 +94,34 @@ export class AppComponent implements OnInit {
         }]
       });
     }, 2000);
+
+    sub.unsubscribe;
+  }
+
+  changesSubscriptionTest() {
+    /** subscribe to user instance onChanges */
+    const sub = this.user.onChanges.subscribe((changes: any) => {
+      console.log('user.onChanges triggered');
+      console.log('changes:', changes);
+      console.log('user', this.user.dump());
+    });
+
+    /** triggers Model attribute changes after 2s */
+    setTimeout(() => {
+      this.user.name = 'Leanny Graham (updated)';
+      this.user.tags = [
+        new Tag({
+          id: "112",
+          name: "alaways lazy",
+        }),
+        new Tag({
+          id: "102",
+          name: "alaways late",
+        })
+      ];
+    }, 2000);
+
+    sub.unsubscribe;
   }
 }
 
