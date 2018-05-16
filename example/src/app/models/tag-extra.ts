@@ -1,15 +1,16 @@
+// tag extra
 import { Formatters } from '../../../../src/lib/formatters';
 import { Model } from '../../../../src/lib/model';
+import { Tag } from './tag';
 
 //import { Formatters } from 'ngx-models';
 //import { Model } from 'ngx-models';
 
-export class Tag extends Model {
-  public id: number;
-  public name: string;
+export class TagExtra extends Tag {
+  public extra: string;
 
   attributesHook() {
-    this.addAttribute('id', null, Formatters.toInteger);
-    this.addAttribute('name');
+    super.attributesHook();
+    this.addAttribute('extra');
   }
 }

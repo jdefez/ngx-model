@@ -1,6 +1,8 @@
-import { AppService } from './app.service';
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
+
+import { AppService } from './app.service';
+import { TagExtra } from './models/tag-extra';
 import { User } from './models/user';
 import { Tag } from './models/tag';
 
@@ -9,7 +11,6 @@ import { Tag } from './models/tag';
   templateUrl: './app.component.html',
   styles: []
 })
-
 export class AppComponent implements OnInit {
   public data_loaded: boolean;
   public user: User;
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     // this.loadUsers();
     this.testModelSubscription();
+    //this.testSubModelInstance();
   }
 
   loadUsers() {
@@ -68,9 +70,19 @@ export class AppComponent implements OnInit {
       }]
     });
 
-    // this.changesSubscriptionTest();
+    this.changesSubscriptionTest();
 
-    this.patchSubscriptionTest();
+    // this.patchSubscriptionTest();
+  }
+
+  testSubModelInstance() {
+    const tag = new TagExtra({
+      id: 3,
+      name: 'test',
+      extra: 'extra param'
+    });
+
+    console.log('tag', tag);
   }
 
   patchSubscriptionTest() {
@@ -86,12 +98,14 @@ export class AppComponent implements OnInit {
       this.user.patch({
         'name' : 'Leanny Graham (updated)',
         'tags' : [{
-          id: "112",
-          name: "alaways lazy",
-        }, {
-          id: "102",
-          name: "alaways late",
-        }]
+            id: "112",
+            name: "always lazy",
+            extra: "extra lazy"
+          }, {
+            id: "102",
+            name: "always late",
+            extra: "extra late",
+          }]
       });
     }, 2000);
 
@@ -110,13 +124,15 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       this.user.name = 'Leanny Graham (updated)';
       this.user.tags = [
-        new Tag({
+        new TagExtra({
           id: "112",
-          name: "alaways lazy",
+          name: "always lazy",
+          extra: "always extra lazy"
         }),
-        new Tag({
+        new TagExtra({
           id: "102",
-          name: "alaways late",
+          name: "always late",
+          extra: "always extra late"
         })
       ];
     }, 2000);

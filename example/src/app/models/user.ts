@@ -1,9 +1,10 @@
-//import { Formatters } from '../../../../src/lib/formatters';
-//import { Model } from '../../../../src/lib/model';
+import { Formatters } from '../../../../src/lib/formatters';
+import { Model } from '../../../../src/lib/model';
 
-import { Formatters } from 'ngx-models';
-import { Model } from 'ngx-models';
+//import { Formatters } from 'ngx-models';
+//import { Model } from 'ngx-models';
 
+import { TagExtra } from './tag-extra';
 import { Company } from './company';
 import { Address } from './address';
 import { Tag } from './tag';
@@ -17,7 +18,7 @@ export class User extends Model {
   public website: string;
   public company: any;
   public address: any;
-  public tags: Array<Tag>;
+  public tags: Array<TagExtra>;
 
   constructor(attributes?) {
     super(attributes);
@@ -35,6 +36,6 @@ export class User extends Model {
     this.addAttribute('address')
       .setSingleModelsRelation(Address);
 
-    this.addAttribute('tags').setArrayOfModelsRelation(Tag);
+    this.addAttribute('tags').setArrayOfModelsRelation(TagExtra);
   }
 }
