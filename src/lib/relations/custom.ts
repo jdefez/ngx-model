@@ -9,8 +9,10 @@ export class CustomRelation  extends Relation {
   }
 
   set(value: any): any {
-    if (this.has_callback) {
+    if (value && this.has_callback) {
       return this.callback.call(null, value);
+    } else {
+      return this._default;
     }
   }
 }
