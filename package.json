@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "watch --wait=5 'npm run start' src/",
-    "clean": "rm -rf node_modules dist example/node_modules",
+    "clean": "rm -rf node_modules example/node_modules",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
