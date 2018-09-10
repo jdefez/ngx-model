@@ -1,7 +1,7 @@
 import { Observable } from "rxjs";
-import { Subject } from "rxjs";
 import { Attribute } from './attribute';
 import { Relation } from './relation';
+import { Subject } from "rxjs";
 
 export abstract class Model {
   private _attributes: Array<Attribute> = [];
