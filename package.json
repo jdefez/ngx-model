@@ -26,7 +26,6 @@
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "@types/node": "^10.9.4",
     "rxjs-compat": "^6.1.0"
   }
 }
