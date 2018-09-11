@@ -323,7 +323,6 @@ export abstract class Model {
           typeof obj[Symbol.iterator] === 'function'
           || typeof obj.dump === 'function'
           || obj instanceof Object
-
         )
     );
     }
