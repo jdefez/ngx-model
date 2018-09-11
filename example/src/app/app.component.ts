@@ -22,8 +22,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.loadUsers();
-    this.testModelSubscription();
+    this.loadUsers();
+    //this.testModelSubscription();
     //this.testSubModelInstance();
   }
 
