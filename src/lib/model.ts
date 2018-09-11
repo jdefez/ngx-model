@@ -231,6 +231,7 @@ export abstract class Model {
   dumpIterable(prop: string, input: any, indent, isLast): string {
     let res = '';
     const name = this.getType(input);
+
     if (name === 'Array') {
       res += this.padStart(`${prop}: ${name} (${input.length}) [\n`, indent);
       res += this.dump(input, indent);
@@ -249,6 +250,7 @@ export abstract class Model {
   dumpAttribute(prop: string, input: any, indent, isLast): string {
     let res = '';
     const name = this.getType(input);
+
     if (name === 'String') {
       res += this.padStart(`${prop}: ${name} (${input.length}) "${input}"`, indent);
 
