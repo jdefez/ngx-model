@@ -289,8 +289,8 @@ export abstract class Model {
     let name = '';
     let type = typeof obj;
 
-    if (!obj) {
-      name = String(obj);
+    if (obj === null) {
+      return '';
 
     } else if (type === 'object') {
       if (typeof obj.join === 'function') {
