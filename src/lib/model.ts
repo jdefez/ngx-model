@@ -311,13 +311,19 @@ export abstract class Model {
   }
 
   isIterable(obj: any): boolean {
-    return (
-      obj
-      && typeof obj !== 'string'
-      && (
-        typeof obj[Symbol.iterator] === 'function'
-        || typeof obj.dump === 'function'
-      )
+    if (!obj) {
+      return false;
+    } else {
+      return (
+        obj
+        && typeof obj !== 'string'
+        && (
+          typeof obj[Symbol.iterator] === 'function'
+          || typeof obj.dump === 'function'
+          || obj instanceof Object
+
+        )
     );
+    }
   }
 }
