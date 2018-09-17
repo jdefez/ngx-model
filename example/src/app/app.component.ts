@@ -26,9 +26,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.dumpTest();
+    //this.toJsonTest();
     // this.loadUsers();
     // this.testModelSubscription();
     // this.testSubModelInstance();
+  }
+
+  toJsonTest() {
+    this.myUser = new MyUser(USER_JSON);
+    console.log(this.myUser.toJson('property_types'));
   }
 
   dumpTest() {

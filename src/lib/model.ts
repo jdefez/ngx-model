@@ -165,8 +165,12 @@ export abstract class Model {
     return JSON.parse(this.toJson());
   }
 
-  public toJson(): any {
-    return JSON.stringify(this);
+  public toJson(attribute?: any): any {
+    if (attribute && this.hasOwnProperty(attribute)) {
+      return JSON.stringify(this[attribute]);
+    } else {
+      return JSON.stringify(this);
+    }
   }
 
   public clone() {
