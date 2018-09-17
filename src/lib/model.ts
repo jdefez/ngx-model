@@ -165,7 +165,7 @@ export abstract class Model {
     return JSON.parse(this.toJson());
   }
 
-  public toJson(attribute?: any): any {
+  public toJson(attribute?: string): any {
     if (attribute && this.hasOwnProperty(attribute)) {
       return JSON.stringify(this[attribute]);
     } else {
