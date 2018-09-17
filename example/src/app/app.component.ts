@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.dumpTest();
-    //this.toJsonTest();
+    // this.toJsonTest();
     // this.loadUsers();
     // this.testModelSubscription();
     // this.testSubModelInstance();
