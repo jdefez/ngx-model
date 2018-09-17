@@ -15,8 +15,9 @@ import * as  USER_JSON from './my-user.json';
 })
 export class AppComponent implements OnInit {
   public data_loaded: boolean;
+  public output: any;
   public user: User;
-  public myUser: MyUser;
+  // public myUser: MyUser;
 
   constructor(private service: AppService) { }
 
@@ -25,20 +26,27 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dumpTest();
+    // this.pluckTest();
+    // this.dumpTest();
     // this.toJsonTest();
-    // this.loadUsers();
     // this.testModelSubscription();
     // this.testSubModelInstance();
+    this.loadUsers();
+  }
+
+  pluckTest() {
+    const user = new MyUser(USER_JSON);
+    this.output = user.pluck('products', 'ref');
   }
 
   toJsonTest() {
-    this.myUser = new MyUser(USER_JSON);
-    console.log(this.myUser.toJson('property_types'));
+    const user = new MyUser(USER_JSON);
+    this.output = user.toJson('property_types');
   }
 
   dumpTest() {
-    this.myUser = new MyUser(USER_JSON);
+    const user = new MyUser(USER_JSON);
+    this.output = user.dump();
   }
 
   loadUsers() {
@@ -54,7 +62,7 @@ export class AppComponent implements OnInit {
 
   testModelSubscription() {
     /** New user instance */
-    this.user = new User({
+    this.output = new User({
       "id": 1,
       "name": "Leanne Graham",
       "username": "Bret",
@@ -96,7 +104,7 @@ export class AppComponent implements OnInit {
       extra: 'extra param'
     });
 
-    console.log('tag', tag);
+    this.output = tag.dump();
   }
 
   patchSubscriptionTest() {
