@@ -154,7 +154,7 @@ export abstract class Model {
     });
   }
 
-  applyRelation(attribute: Attribute, value: any): any {
+  protected applyRelation(attribute: Attribute, value: any): any {
     if (attribute.has_relation) {
       value = attribute.relation.set(value);
     }
