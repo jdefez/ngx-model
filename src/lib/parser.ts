@@ -1,5 +1,4 @@
 export class Parser {
-
   constructor() { }
 
   public dump(value: any, indent=0): string {
