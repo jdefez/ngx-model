@@ -41,7 +41,8 @@ export class AppComponent implements OnInit {
 
   toJsonTest() {
     const user = new MyUser(USER_JSON);
-    this.output = user.toJson('property_types');
+    // this.output = user.toJson('property_types');
+    this.output = user.toJson();
   }
 
   dumpTest() {
