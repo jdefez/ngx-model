@@ -45,7 +45,7 @@ export abstract class Model {
     return this._observable_patched;
   }
 
-  create(attributes: any) {
+  public create(attributes: any) {
     this.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
         this[prop] = value;
@@ -53,7 +53,7 @@ export abstract class Model {
     });
   }
 
-  patch(attributes: any) {
+  public patch(attributes: any) {
     let patched = {};
     this.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
@@ -69,33 +69,72 @@ export abstract class Model {
     this._subject_patched.next(patched);
   }
 
-  setProperties(attributes: Array<Attribute>) {
+  public toObject () {
+    return JSON.parse(this.toJson());
+  }
+
+  public toJson(attribute?: string): any {
+    if (attribute && this.hasOwnProperty(attribute)) {
+      return JSON.stringify(this[attribute]);
+    } else {
+      return JSON.stringify(this);
+    }
+  }
+
+  public clone() {
+    return Object.create(
+      Object.getPrototypeOf(this.constructor.prototype),
+      this.propertyDescriptor()
+    );
+  }
+
+  public dump(value?: any, indent=0): string {
+    const parser = new Parser();
+    if (!value) {
+      value = this;
+    }
+    return parser.dump(value, indent);
+  }
+
+  public pluck(attribute: string, key: string): Array<any> {
+    if (this.hasOwnProperty(attribute)) {
+      return this[attribute].map((item: any) => {
+        if (item.hasOwnProperty(key)) {
+          return item[key];
+        }
+      });
+    } else {
+      return [];
+    }
+  }
+
+  protected setProperties(attributes: Array<Attribute>) {
     attributes.forEach((attribute: Attribute) => {
       this.setProperty(attribute);
     });
   }
 
-  setProperty(attribute: Attribute) {
+  protected setProperty(attribute: Attribute) {
     this.setPrivateProperty(attribute.private_name, attribute.default_value);
     this.setAccessorAndMutator(attribute);
   }
 
   /** Attribute methods */
-  findAttribute(name: string): Attribute {
+  protected findAttribute(name: string): Attribute {
     return this._attributes.find(
       (attribute: Attribute) => attribute.name === name
     );
   }
 
-  attributeExists(name: string): boolean {
+  protected attributeExists(name: string): boolean {
     return this.findAttribute(name) instanceof Attribute;
   }
 
-  attributeDoesNotExists(name: string): boolean {
+  protected attributeDoesNotExists(name: string): boolean {
     return this.attributeExists(name) === false;
   }
 
-  addAttribute(name: string, initial_value?: any, formatter?: Function): Attribute {
+  protected addAttribute(name: string, initial_value?: any, formatter?: Function): Attribute {
     if (this.attributeDoesNotExists(name)) {
       const attribute = new Attribute(name, initial_value, formatter)
       this._attributes.push(attribute);
@@ -103,7 +142,7 @@ export abstract class Model {
     }
   }
 
-  cast(attribute: Attribute, value: any): any {
+  protected cast(attribute: Attribute, value: any): any {
     if (attribute.has_formatter) {
       value = attribute.formatter.call(null, value);
     }
@@ -161,26 +200,7 @@ export abstract class Model {
     return value;
   }
 
-  public toObject () {
-    return JSON.parse(this.toJson());
-  }
-
-  public toJson(attribute?: string): any {
-    if (attribute && this.hasOwnProperty(attribute)) {
-      return JSON.stringify(this[attribute]);
-    } else {
-      return JSON.stringify(this);
-    }
-  }
-
-  public clone() {
-    return Object.create(
-      Object.getPrototypeOf(this.constructor.prototype),
-      this.propertyDescriptor()
-    );
-  }
-
-  propertyDescriptor(): any {
+  protected propertyDescriptor(): any {
     const attributes = this.toObject();
     const descriptor = {};
     for (const prop in attributes) {
@@ -194,13 +214,5 @@ export abstract class Model {
       }
     }
     return descriptor;
-  }
-
-  public dump(value?: any, indent=0): string {
-    const parser = new Parser();
-    if (!value) {
-      value = this;
-    }
-    return parser.dump(value, indent);
   }
 }
