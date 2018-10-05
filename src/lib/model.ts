@@ -59,6 +59,7 @@ export abstract class Model {
       if (this.hasOwnProperty(prop)) {
         const previousValue = this[prop];
 
+        // TODO: find a way to patch sub models
         if (previousValue !== value) {
           patched[prop] = { previousValue : previousValue };
           this[prop] = value;
@@ -69,8 +70,12 @@ export abstract class Model {
     this._subject_patched.next(patched);
   }
 
-  public toObject () {
-    return JSON.parse(this.toJson());
+  public toObject (attribute?: string) {
+    if (attribute && this.hasOwnProperty(attribute)) {
+      return JSON.parse(this[attribute]);
+    } else {
+      return JSON.parse(this.toJson());
+    }
   }
 
   public toJson(attribute?: string): any {
