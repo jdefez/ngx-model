@@ -1,6 +1,7 @@
 import { Observable } from "rxjs";
 import { Attribute } from './attribute';
 import { Relation } from './relation';
+import { Helpers } from './helpers';
 import { Subject } from "rxjs";
 import { Parser } from "./parser";
 
@@ -46,7 +47,8 @@ export abstract class Model {
   }
 
   public create(attributes: any) {
-    this.iter(attributes, (prop: string, value: any) => {
+    // this.iter(attributes, (prop: string, value: any) => {
+    Helpers.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
         this[prop] = value;
       }
@@ -55,7 +57,8 @@ export abstract class Model {
 
   public patch(attributes: any) {
     let patched = {};
-    this.iter(attributes, (prop: string, value: any) => {
+    // this.iter(attributes, (prop: string, value: any) => {
+    Helpers.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
         const previousValue = this[prop];
 
@@ -153,17 +156,7 @@ export abstract class Model {
     }
     return value;
   }
-
-  protected iter(obj: any, callback: Function) {
-    if (obj && typeof callback === 'function') {
-      for (const prop in obj) {
-        if (obj.hasOwnProperty(prop)) {
-          callback.call(this, prop, obj[prop]);
-        }
-      }
-    }
-  }
-
+  
   protected setPrivateProperty(name: string, value: any) {
     Object.defineProperty(this, name, {
       value        : value,

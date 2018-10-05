@@ -3,5 +3,6 @@ export * from './lib/relations/single-model';
 export * from './lib/relations/custom';
 export * from './lib/formatters';
 export * from './lib/attribute';
+export * from './lib/helpers';
 export * from './lib/parser';
 export * from './lib/model';

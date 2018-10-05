@@ -18,7 +18,7 @@ export class Parser {
       inputLen = Object.keys(value).length;
     }
 
-    this.iter(value, (prop: string, input: any) => {
+    Helpers.iter(value, (prop: string, input: any) => {
       const isLast = count === inputLen - 1;
       if (this.isIterable(input)) {
         res += this.dumpIterable(prop, input, indent, isLast);
@@ -129,16 +129,6 @@ export class Parser {
           || obj instanceof Object
         )
     );
-    }
-  }
-
-  iter(obj: any, callback: Function) {
-    if (obj && typeof callback === 'function') {
-      for (const prop in obj) {
-        if (obj.hasOwnProperty(prop)) {
-          callback.call(this, prop, obj[prop]);
-        }
-      }
     }
   }
 }
