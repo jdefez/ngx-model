@@ -2,7 +2,7 @@ export class Helpers {
   static iter(obj: any, callback: Function) {
     if (obj && typeof callback === 'function') {
       for (const prop in obj) {
-        if (obj.hasOwnProperty(prop)) {
+        if (obj && obj.hasOwnProperty(prop)) {
           callback.call(this, prop, obj[prop]);
         }
       }
