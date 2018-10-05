@@ -1,3 +1,4 @@
+import { Helpers } from './helpers';
 export class Parser {
   constructor() { }
 
