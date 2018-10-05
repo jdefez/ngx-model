@@ -22,10 +22,10 @@
   },
   "homepage": "https://github.com/jdefez/ngx-model#readme",
   "devDependencies": {
-    "rxjs": "^6.3.2",
+    "rxjs": "^6.3.3",
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "rxjs-compat": "^6.1.0"
+    "rxjs-compat": "^6.3.3"
   }
 }
