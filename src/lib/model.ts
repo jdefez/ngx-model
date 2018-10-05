@@ -47,7 +47,6 @@ export abstract class Model {
   }
 
   public create(attributes: any) {
-    // this.iter(attributes, (prop: string, value: any) => {
     Helpers.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
         this[prop] = value;
@@ -57,12 +56,10 @@ export abstract class Model {
 
   public patch(attributes: any) {
     let patched = {};
-    // this.iter(attributes, (prop: string, value: any) => {
     Helpers.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
         const previousValue = this[prop];
 
-        // TODO: find a way to patch sub models
         if (previousValue !== value) {
           patched[prop] = { previousValue : previousValue };
           this[prop] = value;
@@ -106,11 +103,8 @@ export abstract class Model {
 
   public pluck(attribute: string, key: string): Array<any> {
     if (this.hasOwnProperty(attribute)) {
-      return this[attribute].map((item: any) => {
-        if (item.hasOwnProperty(key)) {
-          return item[key];
-        }
-      });
+      return Helpers.pluck(this[attribute], key);
+
     } else {
       return [];
     }
@@ -156,7 +150,7 @@ export abstract class Model {
     }
     return value;
   }
-  
+
   protected setPrivateProperty(name: string, value: any) {
     Object.defineProperty(this, name, {
       value        : value,
