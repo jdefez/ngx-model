@@ -5,6 +5,10 @@ export class Parser {
   public dump(value: any, indent=0): string {
     let res = '';
 
+    if (!value) {
+      return res;
+    }
+
     if (indent === 0) {
       res = `Model (${Object.keys(value).length}) {\n`;
     }
