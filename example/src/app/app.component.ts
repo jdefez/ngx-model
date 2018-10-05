@@ -35,18 +35,17 @@ export class AppComponent implements OnInit {
   }
 
   pluckTest() {
-    const user = new MyUser(USER_JSON);
+    const user = new MyUser(USER_JSON.default);
     this.output = user.pluck('products', 'ref');
   }
 
   toJsonTest() {
-    const user = new MyUser(USER_JSON);
-    // this.output = user.toJson('property_types');
+    const user = new MyUser(USER_JSON.default);
     this.output = user.toJson();
   }
 
   dumpTest() {
-    const user = new MyUser(USER_JSON);
+    const user = new MyUser(USER_JSON.default);
     this.output = user.dump();
   }
 
@@ -163,4 +162,3 @@ export class AppComponent implements OnInit {
     sub.unsubscribe;
   }
 }
-
