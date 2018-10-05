@@ -136,7 +136,11 @@ export abstract class Model {
     return this.attributeExists(name) === false;
   }
 
-  protected addAttribute(name: string, initial_value?: any, formatter?: Function): Attribute {
+  protected addAttribute(
+    name: string,
+    initial_value?: any,
+    formatter?: Function
+  ): Attribute {
     if (this.attributeDoesNotExists(name)) {
       const attribute = new Attribute(name, initial_value, formatter)
       this._attributes.push(attribute);

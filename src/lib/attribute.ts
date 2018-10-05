@@ -1,5 +1,6 @@
 import { RelationFactory } from './relations/relation-factory';
 import { Relation } from './relation';
+import { Model } from './model';
 
 export class Attribute {
   private _default_value: any;
@@ -7,7 +8,11 @@ export class Attribute {
   private _relation: Relation;
   private _name: string;
 
-  constructor(name: string, default_value: any = null, formatter: Function | null = null) {
+  constructor(
+    name: string,
+    default_value: any = null,
+    formatter: Function | null = null
+  ) {
     this._default_value = default_value;
     this._formatter = formatter;
     this._name = name;
