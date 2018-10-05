@@ -5,7 +5,7 @@
 <ul *ngIf="data_loaded"
   class="list-style-none">
   <li *ngFor="let user of this.service.users">
-    <pre class="pre">{{ user | json }}</pre>
+    <pre class="pre">{{ user.dump() }}</pre>
   </li>
 </ul>
 
