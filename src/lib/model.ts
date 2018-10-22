@@ -164,17 +164,22 @@ export abstract class Model {
     });
   }
 
+  protected applyAttributeDefaultValue(name: string, input: any): any {
+    if (input === null || input === undefined) {
+      const att = this.findAttribute(name);
+      if (att) {
+        input = att.default_value;
+      }
+    }
+    return input;
+  }
+
   protected setAccessorAndMutator(attribute: Attribute) {
     Object.defineProperty(this, attribute.name, {
-      //get: () => this[attribute.private_name],
-      get: () => {
-        if (!this[attribute.private_name]) {
-          return this.findAttribute(attribute.name).default_value;
-        } else {
-          return this[attribute.private_name]
-        }
-      },
+      get: () => this[attribute.private_name],
       set: (input: any) => {
+        input = this.applyAttributeDefaultValue(attribute.name, input);
+
         if (attribute.has_relation) {
           input = this.applyRelation(attribute, input);
         } else {
