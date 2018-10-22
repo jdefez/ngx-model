@@ -1,8 +1,8 @@
-//import { Formatters } from '../../../../src/lib/formatters';
-//import { Model } from '../../../../src/lib/model';
+import { Formatters } from '../../../../src/lib/formatters';
+import { Model } from '../../../../src/lib/model';
 
-import { Formatters } from 'ngx-models';
-import { Model } from 'ngx-models';
+// import { Formatters } from 'ngx-models';
+// import { Model } from 'ngx-models';
 
 import { Location } from './location';
 
@@ -24,6 +24,6 @@ export class Address extends Model {
     this.addAttribute('suite', null, Formatters.toString);
     this.addAttribute('zipcode', null, Formatters.toString);
     this.addAttribute('geo', null)
-      .setSingleModelsRelation(Location);
+      .setSingleModelRelation(Location);
   }
 }

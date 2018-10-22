@@ -58,7 +58,7 @@ export class MyUser extends Model {
       }
       return res;
     });
-    this.addAttribute('agency', null).setSingleModelsRelation(Agency);
+    this.addAttribute('agency', null).setSingleModelRelation(Agency);
   }
 
   get canCreateListing(): boolean {

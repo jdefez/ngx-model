@@ -32,9 +32,9 @@ export class User extends Model {
     this.addAttribute('phone');
     this.addAttribute('website');
     this.addAttribute('company')
-      .setSingleModelsRelation(Company);
+      .setSingleModelRelation(Company);
     this.addAttribute('address')
-      .setSingleModelsRelation(Address);
+      .setSingleModelRelation(Address);
 
     this.addAttribute('tags').setArrayOfModelsRelation(TagExtra);
   }

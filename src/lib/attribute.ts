@@ -19,7 +19,7 @@ export class Attribute {
   }
 
   // Relations methods
-  setSingleModelsRelation(model: any) {
+  setSingleModelRelation(model: any) {
     this._relation = RelationFactory.build('single-model', model);
   }
 

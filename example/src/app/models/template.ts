@@ -27,7 +27,7 @@ export class TemplateModel extends Model {
 
     // Relation of type attribute:string : ModelChildClass
     // this.addAttribute('sample')
-    //   .setSingleModelsRelation(model: ModelChildClass);
+    //   .setSingleModelRelation(model: ModelChildClass);
 
     // Relation of type Array<ModelChildClass>
     // this.addAttribute('sample')
