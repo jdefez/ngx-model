@@ -6,6 +6,7 @@ import { TagExtra } from './models/tag-extra';
 import { User } from './models/user';
 import { MyUser } from './models-my/my-user';
 import { Tag } from './models/tag';
+import { Test } from './models/test';
 import * as  USER_JSON from './my-user.json';
 
 @Component({
@@ -31,7 +32,18 @@ export class AppComponent implements OnInit {
     // this.toJsonTest();
     // this.testModelSubscription();
     // this.testSubModelInstance();
-    this.loadUsers();
+    this.testTest();
+    // this.loadUsers();
+  }
+
+  testTest() {
+    const model = new Test({id: null, firstname: null});
+    console.log(model.dump());
+    setTimeout(() => {
+      model.id = 3;
+      model.firstname = 'you';
+      console.log(model.dump());
+    }, 2000);
   }
 
   pluckTest() {

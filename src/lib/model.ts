@@ -166,7 +166,14 @@ export abstract class Model {
 
   protected setAccessorAndMutator(attribute: Attribute) {
     Object.defineProperty(this, attribute.name, {
-      get: () => this[attribute.private_name],
+      //get: () => this[attribute.private_name],
+      get: () => {
+        if (!this[attribute.private_name]) {
+          return this.findAttribute(attribute.name).default_value;
+        } else {
+          return this[attribute.private_name]
+        }
+      },
       set: (input: any) => {
         if (attribute.has_relation) {
           input = this.applyRelation(attribute, input);
