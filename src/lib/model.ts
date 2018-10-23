@@ -164,12 +164,9 @@ export abstract class Model {
     });
   }
 
-  protected applyAttributeDefaultValue(name: string, input: any): any {
+  protected applyAttributeDefaultValue(attribute: Attribute, input: any): any {
     if (input === null || input === undefined) {
-      const att = this.findAttribute(name);
-      if (att) {
-        input = att.default_value;
-      }
+      input = attribute.default_value;
     }
     return input;
   }
@@ -178,7 +175,7 @@ export abstract class Model {
     Object.defineProperty(this, attribute.name, {
       get: () => this[attribute.private_name],
       set: (input: any) => {
-        input = this.applyAttributeDefaultValue(attribute.name, input);
+        input = this.applyAttributeDefaultValue(attribute, input);
 
         if (attribute.has_relation) {
           input = this.applyRelation(attribute, input);
