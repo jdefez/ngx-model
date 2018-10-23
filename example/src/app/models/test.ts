@@ -13,7 +13,7 @@ export class Test extends Model {
   }
 
   attributesHook() {
-    this.addAttribute('id', 1);
+    this.addAttribute('id', 1, Formatters.toInteger);
     this.addAttribute('firstname', 'me');
   }
 }

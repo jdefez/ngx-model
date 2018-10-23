@@ -32,16 +32,22 @@ export class AppComponent implements OnInit {
     // this.toJsonTest();
     // this.testModelSubscription();
     // this.testSubModelInstance();
-    this.testTest();
-    // this.loadUsers();
+    // this.testAttributeDefaultValue();
+    this.loadUsers();
   }
 
-  testTest() {
+  testAttributeDefaultValue() {
     const model = new Test({id: null, firstname: null});
     console.log(model.dump());
     setTimeout(() => {
       model.id = 3;
       model.firstname = 'you';
+      console.log(model.dump());
+    }, 2000);
+
+    setTimeout(() => {
+      model.id = null;
+      model.firstname = null;
       console.log(model.dump());
     }, 2000);
   }
