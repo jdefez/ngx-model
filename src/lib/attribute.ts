@@ -41,7 +41,12 @@ export class Attribute {
 
   get default_value(): any {
     if (this.has_relation) {
-      return this.relation.default;
+      if (this._default_value instanceof this.relation.model) {
+        return this._default_value;
+      } else {
+        return this.relation.default;
+      }
+
     } else {
       return this._default_value;
     }
