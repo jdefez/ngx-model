@@ -45,6 +45,9 @@ export class Attribute {
 
     } else if (this.has_relation) {
       return this.relation.default;
+
+    } else {
+      return null;
     }
   }
 
