@@ -42,12 +42,16 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       model.id = 3;
       model.firstname = 'you';
+      model.tag.name = 'tag name';
+      model.tag.id = 1;
       console.log(model.dump());
     }, 2000);
 
     setTimeout(() => {
       model.id = null;
       model.firstname = null;
+      model.tag.id = 12;
+      model.tag.name = 'tag name (updated)';
       console.log(model.dump());
     }, 2000);
   }
