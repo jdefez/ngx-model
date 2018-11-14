@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
   }
 
   testAttributeDefaultValue() {
-    const model = new Test({id: null, firstname: null});
+    const model = new Test();
     console.log(model.dump());
     setTimeout(() => {
       model.id = 3;
