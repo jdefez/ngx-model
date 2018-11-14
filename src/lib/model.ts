@@ -34,6 +34,7 @@ export abstract class Model {
 
     /** Set initial values if any. */
     this.create(attributes);
+
   }
 
   protected abstract attributesHook(): void;
