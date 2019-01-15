@@ -63,9 +63,9 @@ export class User extends Model {
     this.addAttribute('phone');
     this.addAttribute('website');
     this.addAttribute('company')
-      .setSingleModelsRelation('company', Company);
+      .setSingleModelRelation('company', Company);
     this.addAttribute('address')
-      .setSingleModelsRelation('address', Address);
+      .setSingleModelRelation('address', Address);
   }
 
   get full_name(): string {
@@ -99,7 +99,7 @@ export class Address extends Model {
     this.addAttribute('suite', null, Formatters.toString);
     this.addAttribute('zipcode', null, Formatters.toString);
     this.addAttribute('geo', null)
-      .setSingleModelsRelation('geo', Location);
+      .setSingleModelRelation('geo', Location);
   }
 }
 ```
