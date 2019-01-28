@@ -1,8 +1,7 @@
-import { Observable } from "rxjs";
+import { Observable ,  Subject } from "rxjs";
 import { Attribute } from './attribute';
 import { Relation } from './relation';
 import { Helpers } from './helpers';
-import { Subject } from "rxjs";
 import { Parser } from "./parser";
 
 export abstract class Model {
