@@ -8,7 +8,7 @@
     "build": "tsc",
     "watch": "watch --wait=5 'npm run start' src/",
     "clean": "rm -rf node_modules example/node_modules",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha --require ts-node/register tests/**/test.ts"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,13 @@
   },
   "homepage": "https://github.com/jdefez/ngx-model#readme",
   "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "chai": "^4.2.0",
+    "cross-env": "^5.2.0",
+    "mocha": "^5.2.0",
     "rxjs": "^6.3.3",
+    "ts-node": "^8.0.2",
     "typescript": "^3.2.4"
   },
   "dependencies": {}
