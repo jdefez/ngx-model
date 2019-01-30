@@ -40,9 +40,14 @@ export class Formatters {
   }
 
   static toBoolean(value: any): boolean {
-    if (String(value) === 'false') {
-      return false;
+    if (value !== null) {
+      if (String(value) === 'false') {
+        return false;
+      }
+      return Boolean(value);
+
+    } else {
+      return null;
     }
-    return Boolean(value);
   }
 }
