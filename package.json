@@ -8,7 +8,6 @@
   "types": "dist/bundle.d.ts",
   "scripts": {
     "build": "npm run clean:dist & rollup -c",
-    "clean:modules": "rm -rf node_modules example/node_modules",
     "clean:dist": "rm -rf dist",
     "test": "TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha --require ts-node/register tests/**/test.ts"
   },
