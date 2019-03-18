@@ -18,7 +18,7 @@ export default {
   }, {
     file: pkg.browser,
     format: 'umd',
-    name : 'Viewer',
+    name : 'NgxModels',
     exports: 'named',
     sourcemap: true,
   }],
