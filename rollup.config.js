@@ -11,10 +11,10 @@ export default {
   input: 'src/index.ts',
   output: [{
     file: pkg.main,
-    format: 'es',
+    format: 'cjs',
   }, {
     file: pkg.module,
-    format: 'cjs',
+    format: 'es',
   }, {
     file: pkg.browser,
     format: 'umd',
