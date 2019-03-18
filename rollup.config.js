@@ -2,11 +2,10 @@ import nodeBuiltins from 'rollup-plugin-node-builtins';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import nodeGlobals from 'rollup-plugin-node-globals';
 import sourcemaps from 'rollup-plugin-sourcemaps';
-// import pascalCase from 'pascal-case';
+import typescript from 'rollup-plugin-typescript2';
 import commonjs from 'rollup-plugin-commonjs'
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
-import typescript from 'rollup-plugin-typescript2';
 
 export default {
   input: 'src/index.ts',
@@ -28,8 +27,8 @@ export default {
     //...Object.keys(pkg.dependencies || {}),
   ],
   plugins: [
-    sourcemaps(), nodeResolve(), nodeGlobals(), nodeBuiltins(), commonjs(), terser(),
-    typescript()
+    sourcemaps(), nodeResolve(), nodeGlobals(), nodeBuiltins(), commonjs(),
+    terser(), typescript()
   ],
 };
 
