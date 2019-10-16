@@ -6,7 +6,7 @@ original structure of a given api. Edit the data and send them back to the api.
 
 Suppose the json is like this:
 
-```
+```json
 {
   "id": 1,
   "name": "Leanne Graham",
@@ -34,7 +34,7 @@ Suppose the json is like this:
 
 We can create a model like this one to reflect the api structure:
 
-```
+```typescript
 import { Model } from 'ngx-models';
 import { Formatters } from 'ngx-models';
 
@@ -63,9 +63,9 @@ export class User extends Model {
     this.addAttribute('phone');
     this.addAttribute('website');
     this.addAttribute('company')
-      .setSingleModelsRelation('company', Company);
+      .setSingleModelRelation('company', Company);
     this.addAttribute('address')
-      .setSingleModelsRelation('address', Address);
+      .setSingleModelRelation('address', Address);
   }
 
   get full_name(): string {
@@ -74,13 +74,13 @@ export class User extends Model {
 }
 ```
 
-Buy doing this we have created a class User which has a clever method `full_name`
+By doing this we have created a class User which has a clever method `full_name`
 that we’ll be able to use elswhere in our application.
 
-And more, we have also create relation to the Company and Address models. The
+And more, we have also created a relation to the Company and Address models. The
 Address model himself has a relation to the Location model.
 
-```
+```typescript
 export class Address extends Model {
   public city: string;
   public street: string;
@@ -99,16 +99,16 @@ export class Address extends Model {
     this.addAttribute('suite', null, Formatters.toString);
     this.addAttribute('zipcode', null, Formatters.toString);
     this.addAttribute('geo', null)
-      .setSingleModelsRelation('geo', Location);
+      .setSingleModelRelation('geo', Location);
   }
 }
 ```
 
 ## Creating a model
 
-To create a model we simple have create an instance of our model like this:
+To create a model we simple have to create an instance of our model like this:
 
-```
+```typescript
 this.user = new User(json_data);
 ```
 
