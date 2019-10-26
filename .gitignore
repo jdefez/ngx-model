@@ -1,5 +1,6 @@
 dist/
 node_modules/
 example/node_modules/
+package-lock.json
 .rpt2_cache/
 .DS_Store
