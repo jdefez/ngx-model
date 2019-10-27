@@ -32,9 +32,12 @@ Suppose the json is like this:
 }
 ```
 
-We can create a model like this one to reflect the api structure:
+## Creating a model
+We can create a model like this one to reflect the json structure of the A.P.I:
 
 ```typescript
+
+// user.ts model
 import { Model } from 'ngx-models';
 import { Formatters } from 'ngx-models';
 
@@ -62,8 +65,10 @@ export class User extends Model {
     this.addAttribute('email');
     this.addAttribute('phone');
     this.addAttribute('website');
+    // Relation with the Company model
     this.addAttribute('company')
       .setSingleModelRelation('company', Company);
+    // Relation with the Address model
     this.addAttribute('address')
       .setSingleModelRelation('address', Address);
   }
@@ -74,13 +79,36 @@ export class User extends Model {
 }
 ```
 
-By doing this we have created a class User which has a clever method `full_name`
-that we’ll be able to use elswhere in our application.
-
-And more, we have also created a relation to the Company and Address models. The
-Address model himself has a relation to the Location model.
+By doing this we have created a class User with a relation two other classes
+the Company and Address models. The Address model himself has a relation to the
+Location model.
 
 ```typescript
+// model company.ts
+import { Formatters } from 'ngx-models';
+import { Model } from 'ngx-models';
+
+export class Company extends Model {
+  public bs: string;
+  public catchPhrase: string;
+  public name: string;
+
+  constructor(attributes?) {
+    super(attributes);
+  }
+
+  attributesHook() {
+    this.addAttribute('bs');
+    this.addAttribute('catchPhrase');
+    this.addAttribute('name');
+  }
+
+  get full_name(): string {
+    return `${this.name} ${this.bs}`;
+  }
+}
+
+// model adress.ts
 export class Address extends Model {
   public city: string;
   public street: string;
@@ -98,18 +126,58 @@ export class Address extends Model {
     this.addAttribute('street', null, Formatters.toString);
     this.addAttribute('suite', null, Formatters.toString);
     this.addAttribute('zipcode', null, Formatters.toString);
+    // Relation with the Location model
     this.addAttribute('geo', null)
       .setSingleModelRelation('geo', Location);
   }
 }
 ```
 
-## Creating a model
+## Model instanciation
 
-To create a model we simple have to create an instance of our model like this:
+To create a model we simply create an instance of our model and pass the json
+data to its constructor:
 
 ```typescript
 this.user = new User(json_data);
+```
+
+``` json
+console.log(this.user.dump())
+
+// returns
+Model (9) {
+  id: Number 1,
+  name: String (13) "Leanne Graham",
+  username: String (4) "Bret",
+  email: String (17) "Sincere@april.biz",
+  phone: String (21) "1-770-736-8031 x56442",
+  website: String (13) "hildegard.org",
+  company: Model (3) {
+    bs: String (27) "harness real-time e-markets",
+    catchPhrase: String (38) "Multi-layered client-server neural-net",
+    name: String (15) "Romaguera-Crona"
+  },
+  address: Model (5) {
+    city: String (11) "Gwenborough",
+    street: String (11) "Kulas Light",
+    suite: String (8) "Apt. 556",
+    zipcode: String (10) "92998-3874",
+    geo: Model (2) {
+      lat: Number -37.3159,
+      lng: Number 81.1496
+    }
+  },
+  tags: Array (0) [
+  ]
+}
+
+console.log(this.user.full_name())
+console.log(this.user.address.city)
+
+// returns
+// => Leanne Graham Bret
+// => Gwenborough
 ```
 
 

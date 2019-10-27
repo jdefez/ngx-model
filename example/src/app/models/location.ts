@@ -17,4 +17,8 @@ export class Location extends Model {
     this.addAttribute('lat', null, Formatters.toFloat);
     this.addAttribute('lng', null, Formatters.toFloat);
   }
+
+  get latLng(): Array<number> {
+    return [this.lat, this.lng];
+  }
 }
