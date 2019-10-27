@@ -1,6 +1,6 @@
 {
   "name": "ngx-models",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Models with relations for typescript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
