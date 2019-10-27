@@ -1,10 +1,15 @@
 # ngx-models
 
-## Builds Models class and Models relations from json data.
-The aim is to transform json data into classes (Models) that reflect the
-original structure of a given api. Edit the data and send them back to the api.
+Why did I do that ... because angular does not ship with a model object. Because
+dealing with API data has to be reliable and flexible. And because a model
+object is a key feature in oop ...
 
-Suppose the json is like this:
+## So ...
+The aim is to transform json data into classes (models) reflecting the original
+structure of a given api. From there we will edit the data and send them back
+to the api.
+
+Let’s say the api returns json data shapped like this:
 
 ```json
 {
@@ -61,7 +66,8 @@ export class User extends Model {
   attributesHook() {
     this.addAttribute('id');
     this.addAttribute('name');
-    this.addAttribute('username');
+    // I want to make sure the username attribute value is a string
+    this.addAttribute('username', '', Formatters.toString);
     this.addAttribute('email');
     this.addAttribute('phone');
     this.addAttribute('website');
@@ -79,8 +85,8 @@ export class User extends Model {
 }
 ```
 
-By doing this we have created a class User with a relation two other classes
-the Company and Address models. The Address model himself has a relation to the
+By doing this we have created a class User with a relation with two other classes
+Company and Address. The Address model himself has a relation to the
 Location model.
 
 ```typescript
@@ -140,12 +146,16 @@ data to its constructor:
 
 ```typescript
 this.user = new User(json_data);
+console.log(this.user.dump())
+console.log('full name:', this.user.full_name)
+console.log('city', this.user.address.city)
+
+this.user.address.city = 'London';
+console.log('city updated', this.user.address.city)
+// returns
 ```
 
-``` json
-console.log(this.user.dump())
-
-// returns
+``` javascript
 Model (9) {
   id: Number 1,
   name: String (13) "Leanne Graham",
@@ -167,17 +177,23 @@ Model (9) {
       lat: Number -37.3159,
       lng: Number 81.1496
     }
-  },
-  tags: Array (0) [
-  ]
+  }
+}
+full name: Leanne Graham Bret
+city: Gwenborough
+city updated: London
+```
+
+To send our model back to the api we can simply to something like:
+
+``` typescript
+public saveUser() {
+  this.http.put(url, this.user.toJson(), {options}).subscribe(
+    (response: HttpResponse) => this.user.patch(response)
+    (...)
+  );
 }
 
-console.log(this.user.full_name())
-console.log(this.user.address.city)
-
-// returns
-// => Leanne Graham Bret
-// => Gwenborough
 ```
 
 
