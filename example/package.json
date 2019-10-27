@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "^8.2.12",
     "@angular/router": "^8.2.12",
     "core-js": "^2.5.7",
-    "ngx-models": "^1.2.2",
+    "ngx-models": "^1.2.22",
     "rxjs": "^6.3.3",
     "tslib": "^1.9.0",
     "zone.js": "^0.9.1"
