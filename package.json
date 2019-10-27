@@ -2,7 +2,11 @@
   "name": "ngx-models",
   "version": "1.2.22",
   "description": "Models with relations for typescript",
-  "keywords" : ["typescript", "angular", "model"],
+  "keywords": [
+    "typescript",
+    "angular",
+    "model"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.es.js",
@@ -23,12 +27,11 @@
     "email": "jdefez@gmail.com"
   },
   "homepage": "https://github.com/jdefez/ngx-model#readme",
-  "keywords": ["typescript", "angular", "model"],
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.5",
     "chai": "^4.2.0",
-    "mocha": "^5.2.0",
+    "mocha": "^6.2.2",
     "pascal-case": "^2.0.1",
     "rollup": "^1.6.0",
     "rollup-plugin-commonjs": "^9.2.1",
