@@ -22,6 +22,7 @@
     "email": "jdefez@gmail.com"
   },
   "homepage": "https://github.com/jdefez/ngx-model#readme",
+  "keywords": ["typescript", "angular", "model"],
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.5",
