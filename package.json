@@ -1,6 +1,6 @@
 {
   "name": "ngx-models",
-  "version": "1.2.22",
+  "version": "1.2.23",
   "description": "Models with relations for typescript",
   "keywords": [
     "typescript",
