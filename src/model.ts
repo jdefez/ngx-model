@@ -39,10 +39,16 @@ export abstract class Model implements ModelInterface {
     this.setPrivateProperty('_attributes', []);
 
     this.setPrivateProperty('_subject_changes', new Subject());
-    this.setPrivateProperty('_observable_changes', this._subject_changes.asObservable());
+    this.setPrivateProperty(
+      '_observable_changes',
+      this._subject_changes.asObservable()
+    );
 
     this.setPrivateProperty('_subject_patched', new Subject());
-    this.setPrivateProperty('_observable_patched', this._subject_patched.asObservable());
+    this.setPrivateProperty(
+      '_observable_patched',
+      this._subject_patched.asObservable()
+    );
 
     /** Collects attributes and relations definition. */
     this.attributesHook();
@@ -82,7 +88,7 @@ export abstract class Model implements ModelInterface {
         const previousValue = this[prop];
 
         if (previousValue !== value) {
-          patched[prop] = {previousValue: previousValue};
+          patched[prop] = { previousValue: previousValue };
           this[prop] = value;
           patched[prop].currentValue = this[prop];
         }
@@ -125,7 +131,6 @@ export abstract class Model implements ModelInterface {
   public pluck(attribute: string, key: string): Array<any> {
     if (this.hasOwnProperty(attribute)) {
       return Helpers.pluck(this[attribute], key);
-
     } else {
       return [];
     }
@@ -162,7 +167,7 @@ export abstract class Model implements ModelInterface {
     initial_value?: any,
     formatter?: Function
   ): Attribute {
-    const attribute = new Attribute(name, initial_value, formatter)
+    const attribute = new Attribute(name, initial_value, formatter);
     this._attributes.push(attribute);
     return attribute;
   }
@@ -179,7 +184,7 @@ export abstract class Model implements ModelInterface {
       value: value,
       enumerable: false,
       configurable: true,
-      writable: true
+      writable: true,
     });
   }
 
@@ -205,7 +210,7 @@ export abstract class Model implements ModelInterface {
         let changes = {};
         changes[attribute.name] = {
           currentValue: input,
-          previousValue: this[attribute.private_name]
+          previousValue: this[attribute.private_name],
         };
 
         this[attribute.private_name] = input;
@@ -213,7 +218,7 @@ export abstract class Model implements ModelInterface {
         this._subject_changes.next(changes);
       },
       enumerable: true,
-      configurable: true
+      configurable: true,
     });
   }
 
@@ -233,7 +238,7 @@ export abstract class Model implements ModelInterface {
           value: attributes[prop],
           configurable: true,
           enumerable: true,
-          writable: true
+          writable: true,
         };
       }
     }

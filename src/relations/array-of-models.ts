@@ -9,7 +9,7 @@ export class ArrayOfModelsRelation extends Relation {
 
   set(value: Array<any>): any {
     if (value && Array.isArray(value)) {
-      value = value.map((item) => {
+      value = value.map(item => {
         const model = this.model;
         return new model(item);
       });

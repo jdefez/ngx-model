@@ -53,7 +53,7 @@ export class Attribute {
   }
 
   get has_formatter(): boolean {
-    return (this.formatter != null && typeof this.formatter === 'function');
+    return this.formatter != null && typeof this.formatter === 'function';
   }
 
   get relation(): Relation | null {

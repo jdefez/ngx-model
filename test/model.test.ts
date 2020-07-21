@@ -60,7 +60,6 @@ class Hobby extends Model {
   }
 }
 
-
 describe('model tests', () => {
   const userInstance = new User();
   it('User is an instance of model', () => {
@@ -72,15 +71,15 @@ describe('model tests', () => {
     name: 'tata',
     lat: '23,6789',
     options: [
-      {name: 'option 1', value: 2},
-      {name: 'option 2', value: false}
+      { name: 'option 1', value: 2 },
+      { name: 'option 2', value: false },
     ],
-    address: {city: 'paris', zip: '750015'},
+    address: { city: 'paris', zip: '750015' },
     hobbies: {
-      '212': {name: 'skying'},
-      '215': {name: 'darts'},
-      '204': {name: 'cooking'}
-    }
+      '212': { name: 'skying' },
+      '215': { name: 'darts' },
+      '204': { name: 'cooking' },
+    },
   });
 
   it('Model attributes are initialized and casted', () => {
@@ -100,7 +99,7 @@ describe('model tests', () => {
     user.patch({
       id: '15',
       name: 'tata updated',
-      lat: '5.987'
+      lat: '5.987',
     });
     expect(user.id).toStrictEqual(15);
     expect(user.name).toStrictEqual('tata updated');
@@ -111,6 +110,15 @@ describe('model tests', () => {
     expect(user.options).toBeInstanceOf(Array);
     expect(user.address).toBeInstanceOf(Address);
     expect(user.hobbies).toBeInstanceOf(Array);
+  });
+
+  it('Model subscription', () => {
+    const changesSubscription = user.onChanges.subscribe((changes: any) => {
+      expect(changes).toBe('hello');
+      console.log(changes);
+    });
+    user.name = 'Titi';
+    changesSubscription.unsubscribe();
   });
 
   it('Model.clone', () => {

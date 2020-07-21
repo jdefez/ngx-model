@@ -16,7 +16,7 @@ export class Helpers {
 
       do {
         res.push(data.splice(0, len));
-      } while(data.length > 0);
+      } while (data.length > 0);
       return res;
     } else {
       return src;

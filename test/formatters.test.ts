@@ -22,7 +22,6 @@ describe('toFloat formatters tests', () => {
   });
 });
 
-
 describe('toBoolean formatters tests', () => {
   it('(null)null expected to be formatted to (null)null', () => {
     expect(Formatters.toBoolean(null)).toBe(null);

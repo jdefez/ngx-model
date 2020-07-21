@@ -26,7 +26,6 @@ export class Parser {
       const isLast = count === inputLen - 1;
       if (this.isIterable(input)) {
         res += this.dumpIterable(prop, input, indent, isLast);
-
       } else {
         res += this.dumpAttribute(prop, input, indent, isLast);
       }
@@ -40,7 +39,12 @@ export class Parser {
     return res;
   }
 
-  dumpIterable(prop: string, input: any, indent: number, isLast: boolean): string {
+  dumpIterable(
+    prop: string,
+    input: any,
+    indent: number,
+    isLast: boolean
+  ): string {
     let res = '';
     const name = this.getType(input);
 
@@ -48,7 +52,6 @@ export class Parser {
       res += this.padStart(`${prop}: ${name} (${input.length}) [\n`, indent);
       res += this.dump(input, indent);
       res += this.padStart(`]`, indent);
-
     } else {
       const objLen = Object.keys(input).length;
       res += this.padStart(`${prop}: ${name} (${objLen}) {\n`, indent);
@@ -59,13 +62,20 @@ export class Parser {
     return res;
   }
 
-  dumpAttribute(prop: string, input: any, indent: number, isLast: boolean): string {
+  dumpAttribute(
+    prop: string,
+    input: any,
+    indent: number,
+    isLast: boolean
+  ): string {
     let res = '';
     const name = this.getType(input);
 
     if (name === 'String') {
-      res += this.padStart(`${prop}: ${name} (${input.length}) "${input}"`, indent);
-
+      res += this.padStart(
+        `${prop}: ${name} (${input.length}) "${input}"`,
+        indent
+      );
     } else {
       res += this.padStart(`${prop}: ${name} ${input}`, indent);
     }
@@ -77,7 +87,7 @@ export class Parser {
     return isLast ? '\n' : ',\n';
   }
 
-  padStart(str: string, indent: number, padString = "  "): string {
+  padStart(str: string, indent: number, padString = '  '): string {
     let arr: Array<string> = [];
     arr.length = indent;
     arr = arr.fill(padString, 0, indent);
@@ -103,18 +113,14 @@ export class Parser {
 
     if (obj === null) {
       return '';
-
     } else if (type === 'object') {
       if (typeof obj.join === 'function') {
         name = `array`;
-
       } else if (typeof obj.attributesHook === 'function') {
         name = 'model';
-
       } else {
         name = 'object';
       }
-
     } else {
       name = type;
     }
@@ -127,13 +133,11 @@ export class Parser {
       return false;
     } else {
       return (
-        obj
-        && typeof obj !== 'string'
-        && (
-          typeof obj[Symbol.iterator] === 'function'
-          || typeof obj.dump === 'function'
-          || obj instanceof Object
-        )
+        obj &&
+        typeof obj !== 'string' &&
+        (typeof obj[Symbol.iterator] === 'function' ||
+          typeof obj.dump === 'function' ||
+          obj instanceof Object)
       );
     }
   }
