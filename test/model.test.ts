@@ -112,13 +112,40 @@ describe('model tests', () => {
     expect(user.hobbies).toBeInstanceOf(Array);
   });
 
-  it('Model subscription', () => {
+  it('Model onChanges subscription', (done: jest.DoneCallback) => {
     const changesSubscription = user.onChanges.subscribe((changes: any) => {
-      expect(changes).toBe('hello');
-      console.log(changes);
+      try {
+        const propertyChanges = changes.name;
+        expect(changes).toHaveProperty('name');
+        expect(propertyChanges).toHaveProperty('currentValue');
+        expect(propertyChanges.currentValue).toBe('Titi');
+        expect(propertyChanges).toHaveProperty('previousValue');
+        expect(propertyChanges.previousValue).toBe('tata updated');
+        done();
+      } catch (error) {
+        done(error);
+      }
     });
     user.name = 'Titi';
     changesSubscription.unsubscribe();
+  });
+
+  it('Model onPatched subscription', (done: jest.DoneCallback) => {
+    const patchSubscription = user.onPatched.subscribe((changes: any) => {
+      try {
+        const propertyChanges = changes.name;
+        expect(changes).toHaveProperty('name');
+        expect(propertyChanges).toHaveProperty('currentValue');
+        expect(propertyChanges.currentValue).toBe('Toto');
+        expect(propertyChanges).toHaveProperty('previousValue');
+        expect(propertyChanges.previousValue).toBe('Titi');
+        done();
+      } catch (error) {
+        done(error);
+      }
+    });
+    user.patch({ name: 'Toto' });
+    patchSubscription.unsubscribe();
   });
 
   it('Model.clone', () => {
