@@ -9,12 +9,21 @@ export interface LiteralInterface {
 
 export interface ModelInterface {
   [key: string]: any;
+  onChanges: Observable<any>;
+  onPatched: Observable<any>;
   attributesHook(): void;
   addAttribute(
     name: string,
     initial_value?: any,
     formatter?: Function
   ): Attribute | null;
+  create(attributes: LiteralInterface): void;
+  patch(attributes: LiteralInterface): void;
+  toObject(attribute?: string): object;
+  toJson(attribute?: string): string;
+  clone(): ModelInterface;
+  dump(value?: any, indent?: number): string;
+  pluck(attribute: string, key: string): Array<any>;
 }
 
 export abstract class Model implements ModelInterface {
@@ -58,7 +67,7 @@ export abstract class Model implements ModelInterface {
     return this._observable_patched;
   }
 
-  public create(attributes: any) {
+  public create(attributes: LiteralInterface): void {
     Helpers.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
         this[prop] = value;
@@ -66,7 +75,7 @@ export abstract class Model implements ModelInterface {
     });
   }
 
-  public patch(attributes: LiteralInterface) {
+  public patch(attributes: LiteralInterface): void {
     let patched: LiteralInterface = {};
     Helpers.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
@@ -82,7 +91,7 @@ export abstract class Model implements ModelInterface {
     this._subject_patched.next(patched);
   }
 
-  public toObject(attribute?: string) {
+  public toObject(attribute?: string): object {
     if (attribute && this.hasOwnProperty(attribute)) {
       return JSON.parse(this[attribute]);
     } else {
@@ -90,7 +99,7 @@ export abstract class Model implements ModelInterface {
     }
   }
 
-  public toJson(attribute?: string): any {
+  public toJson(attribute?: string): string {
     if (attribute && this.hasOwnProperty(attribute)) {
       return JSON.stringify(this[attribute]);
     } else {
@@ -98,14 +107,14 @@ export abstract class Model implements ModelInterface {
     }
   }
 
-  public clone() {
+  public clone(): ModelInterface {
     return Object.create(
       Object.getPrototypeOf(this.constructor.prototype),
       this.propertyDescriptor()
     );
   }
 
-  public dump(value?: any, indent = 0): string {
+  public dump(value?: any, indent: number = 0): string {
     const parser = new Parser();
     if (!value) {
       value = this;
