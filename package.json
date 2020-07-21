@@ -23,6 +23,7 @@
     "test:watch": "tsdx test --watch",
     "test:coverage": "tsdx test --coverage",
     "lint": "tsdx lint",
+    "lint:fix": "tsdx lint src test --fix",
     "prepare": "tsdx build"
   },
   "peerDependencies": {},
