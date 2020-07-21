@@ -18,16 +18,14 @@ export class Helpers {
         res.push(data.splice(0, len));
       } while(data.length > 0);
       return res;
-
     } else {
       return src;
     }
   }
 
-  static pluck(arr: Array<any>, key): Array<any> {
+  static pluck(arr: Array<any>, key: string): Array<any> {
     if (arr && arr.length && key) {
       return arr.map((item: any) => item[key]);
-
     } else {
       return arr;
     }

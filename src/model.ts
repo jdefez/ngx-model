@@ -1,10 +1,23 @@
-import { Observable ,  Subject } from "rxjs";
+import { Observable, Subject } from 'rxjs';
 import { Attribute } from './attribute';
-import { Relation } from './relation';
 import { Helpers } from './helpers';
-import { Parser } from "./parser";
+import { Parser } from './parser';
 
-export abstract class Model {
+export interface LiteralInterface {
+  [key: string]: any;
+}
+
+export interface ModelInterface {
+  [key: string]: any;
+  attributesHook(): void;
+  addAttribute(
+    name: string,
+    initial_value?: any,
+    formatter?: Function
+  ): Attribute | null;
+}
+
+export abstract class Model implements ModelInterface {
   private _attributes: Array<Attribute> = [];
 
   private _subject_changes: Subject<any>;
@@ -33,10 +46,9 @@ export abstract class Model {
 
     /** Set initial values if any. */
     this.create(attributes);
-
   }
 
-  protected abstract attributesHook(): void;
+  public abstract attributesHook(): void;
 
   get onChanges(): Observable<any> {
     return this._observable_changes;
@@ -54,14 +66,14 @@ export abstract class Model {
     });
   }
 
-  public patch(attributes: any) {
-    let patched = {};
+  public patch(attributes: LiteralInterface) {
+    let patched: LiteralInterface = {};
     Helpers.iter(attributes, (prop: string, value: any) => {
       if (this.hasOwnProperty(prop)) {
         const previousValue = this[prop];
 
         if (previousValue !== value) {
-          patched[prop] = { previousValue : previousValue };
+          patched[prop] = {previousValue: previousValue};
           this[prop] = value;
           patched[prop].currentValue = this[prop];
         }
@@ -70,7 +82,7 @@ export abstract class Model {
     this._subject_patched.next(patched);
   }
 
-  public toObject (attribute?: string) {
+  public toObject(attribute?: string) {
     if (attribute && this.hasOwnProperty(attribute)) {
       return JSON.parse(this[attribute]);
     } else {
@@ -93,7 +105,7 @@ export abstract class Model {
     );
   }
 
-  public dump(value?: any, indent=0): string {
+  public dump(value?: any, indent = 0): string {
     const parser = new Parser();
     if (!value) {
       value = this;
@@ -122,7 +134,7 @@ export abstract class Model {
   }
 
   /** Attribute methods */
-  protected findAttribute(name: string): Attribute {
+  protected findAttribute(name: string): Attribute | undefined {
     return this._attributes.find(
       (attribute: Attribute) => attribute.name === name
     );
@@ -136,20 +148,18 @@ export abstract class Model {
     return this.attributeExists(name) === false;
   }
 
-  protected addAttribute(
+  public addAttribute(
     name: string,
     initial_value?: any,
     formatter?: Function
   ): Attribute {
-    if (this.attributeDoesNotExists(name)) {
-      const attribute = new Attribute(name, initial_value, formatter)
-      this._attributes.push(attribute);
-      return attribute;
-    }
+    const attribute = new Attribute(name, initial_value, formatter)
+    this._attributes.push(attribute);
+    return attribute;
   }
 
   protected cast(attribute: Attribute, value: any): any {
-    if (attribute.has_formatter) {
+    if (attribute.formatter) {
       value = attribute.formatter.call(null, value);
     }
     return value;
@@ -157,10 +167,10 @@ export abstract class Model {
 
   protected setPrivateProperty(name: string, value: any) {
     Object.defineProperty(this, name, {
-      value        : value,
-      enumerable   : false,
-      configurable : true,
-      writable     : true
+      value: value,
+      enumerable: false,
+      configurable: true,
+      writable: true
     });
   }
 
@@ -185,8 +195,8 @@ export abstract class Model {
 
         let changes = {};
         changes[attribute.name] = {
-          currentValue : input,
-          previousValue : this[attribute.private_name]
+          currentValue: input,
+          previousValue: this[attribute.private_name]
         };
 
         this[attribute.private_name] = input;
@@ -200,7 +210,7 @@ export abstract class Model {
 
   protected applyRelation(attribute: Attribute, value: any): any {
     if (attribute.has_relation) {
-      value = attribute.relation.set(value);
+      value = attribute.relation?.set(value);
     }
     return value;
   }
@@ -211,7 +221,7 @@ export abstract class Model {
     for (const prop in attributes) {
       if (attributes.hasOwnProperty(prop)) {
         descriptor[prop] = {
-          value : attributes[prop],
+          value: attributes[prop],
           configurable: true,
           enumerable: true,
           writable: true

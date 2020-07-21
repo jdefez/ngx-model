@@ -1,9 +1,7 @@
 import { Helpers } from './helpers';
 
 export class Parser {
-  constructor() { }
-
-  public dump(value: any, indent=0): string {
+  public dump(value: any, indent = 0): string {
     let res = '';
 
     if (!value) {
@@ -42,7 +40,7 @@ export class Parser {
     return res;
   }
 
-  dumpIterable(prop: string, input: any, indent, isLast): string {
+  dumpIterable(prop: string, input: any, indent: number, isLast: boolean): string {
     let res = '';
     const name = this.getType(input);
 
@@ -61,7 +59,7 @@ export class Parser {
     return res;
   }
 
-  dumpAttribute(prop: string, input: any, indent, isLast): string {
+  dumpAttribute(prop: string, input: any, indent: number, isLast: boolean): string {
     let res = '';
     const name = this.getType(input);
 
@@ -75,12 +73,12 @@ export class Parser {
     return res;
   }
 
-  dumpEol(isLast): string {
+  dumpEol(isLast: boolean): string {
     return isLast ? '\n' : ',\n';
   }
 
-  padStart(str: string, indent: number, padString="  "): string {
-    let arr = [];
+  padStart(str: string, indent: number, padString = "  "): string {
+    let arr: Array<string> = [];
     arr.length = indent;
     arr = arr.fill(padString, 0, indent);
     arr.push(str);
@@ -88,13 +86,15 @@ export class Parser {
   }
 
   toSnakeCase(name: string): string {
+    let returned = name;
     if (name) {
       const arr = String(name).split('');
       if (arr) {
         arr[0] = arr[0].toUpperCase();
-        return arr.join('');
+        returned = arr.join('');
       }
     }
+    return returned;
   }
 
   getType(obj: any): string {
@@ -134,7 +134,7 @@ export class Parser {
           || typeof obj.dump === 'function'
           || obj instanceof Object
         )
-    );
+      );
     }
   }
 }

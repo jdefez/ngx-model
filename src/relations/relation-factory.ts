@@ -10,7 +10,7 @@ export class RelationFactory {
     } else if (type === 'single-model') {
       return new SingleModelRelation(model);
 
-    } else if (type === 'custom') {
+    } else if (type === 'custom' && callback) {
       return new CustomRelation(callback);
 
     } else {
