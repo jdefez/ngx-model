@@ -8,8 +8,8 @@ export class ArrayOfModelsRelation extends Relation {
   }
 
   set(value: Array<any>): any {
-    if (value && this.isArray(value)) {
-      value = value.map((item) => {
+    if (value && Array.isArray(value)) {
+      value = value.map(item => {
         const model = this.model;
         return new model(item);
       });
@@ -18,9 +18,5 @@ export class ArrayOfModelsRelation extends Relation {
     }
 
     return value;
-  }
-
-  isArray(value: any) {
-    return typeof value === 'object' && value.length;
   }
 }

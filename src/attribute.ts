@@ -1,11 +1,10 @@
 import { RelationFactory } from './relations/relation-factory';
 import { Relation } from './relation';
-import { Model } from './model';
 
 export class Attribute {
   private _default_value: any;
   private _formatter: Function | null;
-  private _relation: Relation;
+  private _relation: Relation | null = null;
   private _name: string;
 
   constructor(
@@ -19,12 +18,16 @@ export class Attribute {
   }
 
   // Relations methods
-  setSingleModelRelation(model: any) {
-    this._relation = RelationFactory.build('single-model', model);
+  setCollectionOfModelsRelation(model: any) {
+    this._relation = RelationFactory.build('collection-of-models', model);
   }
 
   setArrayOfModelsRelation(model: any) {
     this._relation = RelationFactory.build('array-of-models', model);
+  }
+
+  setSingleModelRelation(model: any) {
+    this._relation = RelationFactory.build('single-model', model);
   }
 
   setCustomRelation(callback: Function) {
@@ -42,10 +45,8 @@ export class Attribute {
   get default_value(): any {
     if (this._default_value) {
       return this._default_value;
-
     } else if (this.has_relation) {
-      return this.relation.default;
-
+      return this.relation?.default;
     } else {
       return null;
     }
@@ -56,14 +57,14 @@ export class Attribute {
   }
 
   get has_formatter(): boolean {
-    return typeof this.formatter === 'function';
+    return this.formatter != null && typeof this.formatter === 'function';
   }
 
-  get relation(): Relation {
+  get relation(): Relation | null {
     return this._relation;
   }
 
   get has_relation(): boolean {
-    return this._relation !== undefined;
+    return this._relation !== null;
   }
 }
