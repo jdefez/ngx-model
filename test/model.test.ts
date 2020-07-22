@@ -1,4 +1,4 @@
-import { Model, Formatters } from '../src';
+import { Model, Formatters, Collection } from '../src';
 
 class User extends Model {
   id: number;
@@ -7,6 +7,7 @@ class User extends Model {
   options: Array<Option>;
   address: Address;
   hobbies: Array<Hobby>;
+  pets: Collection<Pet>;
 
   attributesHook() {
     this.addAttribute('id', null, Formatters.toInteger);
@@ -27,6 +28,7 @@ class User extends Model {
       }
       return returned;
     });
+    this.addAttribute('pets').setCollectionOfModelsRelation(Pet);
   }
 }
 
@@ -60,6 +62,16 @@ class Hobby extends Model {
   }
 }
 
+class Pet extends Model {
+  public name: string;
+  public type: string;
+
+  attributesHook() {
+    this.addAttribute('name');
+    this.addAttribute('type');
+  }
+}
+
 describe('model tests', () => {
   const userInstance = new User();
   it('User is an instance of model', () => {
@@ -80,6 +92,12 @@ describe('model tests', () => {
       '215': { name: 'darts' },
       '204': { name: 'cooking' },
     },
+    pets: [
+      { name: 'doggy', type: 'dog' },
+      { name: 'iggy', type: 'cat' },
+      { name: 'grrr', type: 'dog' },
+      { name: 'ippsy', type: 'giraffa' },
+    ],
   });
 
   it('Model attributes are initialized and casted', () => {
@@ -110,6 +128,7 @@ describe('model tests', () => {
     expect(user.options).toBeInstanceOf(Array);
     expect(user.address).toBeInstanceOf(Address);
     expect(user.hobbies).toBeInstanceOf(Array);
+    expect(user.pets).toBeInstanceOf(Collection);
   });
 
   it('Model onChanges subscription', (done: jest.DoneCallback) => {
@@ -146,6 +165,15 @@ describe('model tests', () => {
     });
     user.patch({ name: 'Toto' });
     patchSubscription.unsubscribe();
+  });
+
+  it('collection operation', () => {
+    //console.log(user.dump());
+    const firstDog = user.pets.filter((item: Pet) => item.type === 'dog').first;
+    const lastDog = user.pets.filter((item: any) => item.type === 'dog').last;
+    expect(firstDog).toBeInstanceOf(Model);
+    expect(firstDog?.name).toBe('doggy');
+    expect(lastDog?.name).toBe('grrr');
   });
 
   it('Model.clone', () => {

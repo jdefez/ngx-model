@@ -18,12 +18,16 @@ export class Attribute {
   }
 
   // Relations methods
-  setSingleModelRelation(model: any) {
-    this._relation = RelationFactory.build('single-model', model);
+  setCollectionOfModelsRelation(model: any) {
+    this._relation = RelationFactory.build('collection-of-models', model);
   }
 
   setArrayOfModelsRelation(model: any) {
     this._relation = RelationFactory.build('array-of-models', model);
+  }
+
+  setSingleModelRelation(model: any) {
+    this._relation = RelationFactory.build('single-model', model);
   }
 
   setCustomRelation(callback: Function) {
