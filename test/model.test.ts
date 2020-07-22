@@ -168,7 +168,6 @@ describe('model tests', () => {
   });
 
   it('collection operation', () => {
-    //console.log(user.dump());
     const firstDog = user.pets.filter((item: Pet) => item.type === 'dog').first;
     const lastDog = user.pets.filter((item: any) => item.type === 'dog').last;
     expect(firstDog).toBeInstanceOf(Model);
