@@ -1,7 +1,7 @@
 //import { Formatters } from '../../../../src/lib/formatters';
 //import { Model } from '../../../../src/lib/model';
 
-import { Formatters } from 'ngx-models';
+//import { Formatters } from 'ngx-models';
 import { Model } from 'ngx-models';
 
 export class Company extends Model {

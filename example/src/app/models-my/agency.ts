@@ -1,5 +1,8 @@
-import { Formatters } from '../../../../src/lib/formatters';
-import { Model } from '../../../../src/lib/model';
+//import { Formatters } from '../../../../src/formatters';
+//import { Model } from '../../../../src/model';
+
+//import { Formatters } from 'ngx-models';
+import { Model } from 'ngx-models';
 
 export class Agency extends Model {
   public id: number;
