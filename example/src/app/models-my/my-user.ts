@@ -2,8 +2,11 @@ import { Product } from './product';
 import { Option } from './option';
 import { Agency } from './agency';
 
-import { Formatters } from '../../../../src/lib/formatters';
-import { Model } from '../../../../src/lib/model';
+//import { Formatters } from '../../../../src/formatters';
+//import { Model } from '../../../../src/model';
+
+//import { Formatters } from 'ngx-models';
+import { Model } from 'ngx-models';
 
 export class MyUser extends Model {
   public id: number;

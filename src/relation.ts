@@ -1,5 +1,5 @@
 export abstract class Relation {
-  protected _callback: Function;
+  protected _callback: Function | undefined;
   protected _default: any = null;
   private _type: string;
   private _model: any;
@@ -24,7 +24,7 @@ export abstract class Relation {
     return this._model;
   }
 
-  get callback(): Function {
+  get callback(): Function | undefined {
     return this._callback;
   }
 
