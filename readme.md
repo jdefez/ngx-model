@@ -59,10 +59,6 @@ export class User extends Model {
   public company: any;
   public address: any;
 
-  constructor(attributes?) {
-    super(attributes);
-  }
-
   attributesHook() {
     this.addAttribute('id');
     this.addAttribute('name');
@@ -99,10 +95,6 @@ export class Company extends Model {
   public catchPhrase: string;
   public name: string;
 
-  constructor(attributes?) {
-    super(attributes);
-  }
-
   attributesHook() {
     this.addAttribute('bs');
     this.addAttribute('catchPhrase');
@@ -121,11 +113,6 @@ export class Address extends Model {
   public suite: string;
   public zipcode: string;
   public geo: Location;
-
-  // Extends Model class
-  constructor(attributes?) {
-    super(attributes);
-  }
 
   attributesHook() {
     this.addAttribute('city', null, Formatters.toString);
@@ -156,6 +143,8 @@ console.log('city updated', this.user.address.city)
 ```
 
 ``` javascript
+// console.log(user.dump())
+
 Model (9) {
   id: Number 1,
   name: String (13) "Leanne Graham",
@@ -193,7 +182,6 @@ public saveUser() {
     (...)
   );
 }
-
 ```
 
 
